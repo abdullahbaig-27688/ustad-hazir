@@ -196,17 +196,6 @@ const HomeScreen = () => {
     ]);
   };
 
-  // const handleDelete = (vehicle: any) => {
-  //   console.log("Delete vehicle:", vehicle);
-  //   // Call your delete function here
-  // };
-  const renderCategory = ({ item }) => (
-    <Pressable style={styles.categoryCard} key={item.id}>
-      <Image source={item.image} resizeMode="cover" style={styles.tile} />
-      <Text style={styles.categoryText}>{item.name}</Text>
-    </Pressable>
-  );
-
   const renderService = ({ item }) => (
     <Pressable
       style={styles.categoryCard}

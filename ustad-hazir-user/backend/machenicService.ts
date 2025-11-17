@@ -11,7 +11,7 @@ import {
   deleteDoc,
   getDoc,
 } from "firebase/firestore";
-
+const usersCollectionRef = collection(db, "users");
 const serviceCollectionRef = collection(db, "machenicServices");
 const serviceRequestRef = collection(db, "serviceRequests");
 
@@ -185,21 +185,49 @@ const deleteService = async (id: string) => {
 // Get all services by serviceName
 const getServicesByName = async (serviceName: string) => {
   try {
+    // Convert to lowercase and replace space with _ to match DB
+    const formattedName = serviceName.toLowerCase().replace(" ", "_");
+
     const q = query(
       serviceCollectionRef,
-      where("serviceName", "==", serviceName)
+      where("serviceName", "==", formattedName)
     );
     const snapshot = await getDocs(q);
-    return snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+
+    const services = await Promise.all(
+      snapshot.docs.map(async (docSnap) => {
+        const serviceData = docSnap.data();
+        const mechanicId = serviceData.machenicId;
+
+        let mechanicName = "";
+        let mechanicContact = "";
+         let workshopName = "";
+        if (mechanicId) {
+          const mechanicDoc = await getDoc(doc(usersCollectionRef, mechanicId));
+          if (mechanicDoc.exists()) {
+            mechanicName = mechanicDoc.data()?.name || "";
+            mechanicContact = mechanicDoc.data()?.contact || ""; // fetch contact
+            workshopName = mechanicDoc.data()?.workshopName || "";
+          }
+        }
+
+        // Return the final service object
+        return {
+          id: docSnap.id,
+          name: mechanicName, // mechanic's name
+           contact: mechanicContact, // mechanic's contact
+          workshopName: workshopName,
+          ...serviceData,
+        };
+      })
+    );
+
+    return services; // ✅ important
   } catch (error) {
-    console.error("Error fetching services by category:", error);
+    console.error("Error fetching services by name:", error);
     throw error;
   }
 };
-
 export {
   addService,
   getAllServices,
