@@ -8,6 +8,8 @@ import {
   setDoc,
   updateDoc,
   onSnapshot,
+  deleteDoc,
+  getDoc,
 } from "firebase/firestore";
 
 const serviceCollectionRef = collection(db, "machenicServices");
@@ -62,6 +64,55 @@ const getAllServices = async () => {
     return snapshot.docs.map((doc) => doc.data());
   } catch (error) {
     console.error("Error fetching services:", error);
+    throw error;
+  }
+};
+// Get Single Service
+const getSingleService = async (id: string) => {
+  try {
+    const ref = doc(db, "machenicServices", id);
+    const snapshot = await getDoc(ref);
+
+    if (!snapshot.exists()) throw new Error("Service not found");
+
+    return { id: snapshot.id, ...snapshot.data() };
+  } catch (error) {
+    console.error("❌ Error fetching single service:", error);
+    throw error;
+  }
+};
+// ✅ Update / Edit Service
+const updateService = async (
+  serviceId: string,
+  updatedData: {
+    serviceName?: string;
+    description?: string;
+    price?: number | string;
+    duration?: string;
+    category?: string;
+    location?: {
+      address?: string;
+      city?: string;
+      state?: string;
+      country?: string;
+      postalCode?: string;
+      latitude?: number | null;
+      longitude?: number | null;
+    };
+  }
+) => {
+  try {
+    const ref = doc(db, "machenicServices", serviceId);
+
+    await updateDoc(ref, {
+      ...updatedData,
+      updatedAt: new Date().toISOString(),
+    });
+
+    console.log("✅ Service updated:", serviceId);
+    return true;
+  } catch (error) {
+    console.error("❌ Error updating service:", error);
     throw error;
   }
 };
@@ -120,11 +171,43 @@ const updateRequestStatus = async (
     console.error("Error updating request status:", error);
   }
 };
+// ✅ Delete Service
+const deleteService = async (id: string) => {
+  try {
+    const ref = doc(db, "machenicServices", id);
+    await deleteDoc(ref);
+    console.log("Service deleted:", id);
+  } catch (error) {
+    console.error("Error deleting service:", error);
+  }
+};
+
+// Get all services by serviceName
+const getServicesByName = async (serviceName: string) => {
+  try {
+    const q = query(
+      serviceCollectionRef,
+      where("serviceName", "==", serviceName)
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+  } catch (error) {
+    console.error("Error fetching services by category:", error);
+    throw error;
+  }
+};
 
 export {
   addService,
   getAllServices,
+  getSingleService,
   listenToAllServices,
   listenToCustomerRequests,
   updateRequestStatus,
+  updateService,
+  deleteService,
+  getServicesByName,
 };

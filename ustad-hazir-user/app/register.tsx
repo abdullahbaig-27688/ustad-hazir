@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,33 +7,41 @@ import {
   Pressable,
   ScrollView,
   Alert,
+  I18nManager,
 } from "react-native";
 import RegisterInput from "@/components/InputField";
 import RegisterButton from "@/components/Button";
 import RegisterPicker from "@/components/Picker";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { createUserWithEmailAndPassword, getAuth,updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  updateProfile,
+} from "firebase/auth";
 import { getFirestore, doc, setDoc, collection } from "firebase/firestore";
 import { app } from "@/src/firebaseConfig";
-
+import { useTranslation } from "react-i18next";
+import LanguageSelector from "@/components/languageSelector";
 
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 const Register = () => {
+  const { t, i18n } = useTranslation();
+  const [currentLang, setCurrentLang] = useState(i18n.language);
+
   // Common fields
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [contact, setContact] = useState("");
 
   // Role and mechanic fields
-  const [role, setRole] = useState("user");
+  const [role, setRole] = useState("customer");
   const [workshopName, setWorkshopName] = useState("");
   const [experience, setExperience] = useState("");
   const [specialization, setSpecialization] = useState("");
@@ -41,11 +49,26 @@ const Register = () => {
 
   const [rememberMe, setRememberMe] = useState(false);
 
-  
+  // useEffect(() => {
+  //   const isRTL = i18n.language === "ur"; // check if Urdu
+  //   I18nManager.forceRTL(isRTL);
+  // }, [i18n.language]);
+  // Listen for language changes
+  useEffect(() => {
+    const handleLanguageChanged = (lng: string) => {
+      setCurrentLang(lng);
+    };
+
+    i18n.on("languageChanged", handleLanguageChanged);
+
+    return () => {
+      i18n.off("languageChanged", handleLanguageChanged);
+    };
+  }, []);
 
   const handleSignUp = async () => {
     if (password !== confirmPassword) {
-      return Alert.alert("Error", "Passwords do not match!");
+      return Alert.alert(t("password_mismatch"));
     }
 
     try {
@@ -56,10 +79,7 @@ const Register = () => {
       );
       const user = userCredential.user;
 
-      // ✅ Set display name for Firebase Auth
-      await updateProfile(user, {
-        displayName: name,
-      });
+      await updateProfile(user, { displayName: name });
 
       const userData = {
         uid: user.uid,
@@ -79,10 +99,10 @@ const Register = () => {
       const authRef = collection(db, "users");
       await setDoc(doc(authRef, user.uid), userData);
 
-      Alert.alert("Success", "Account created successfully!");
+      Alert.alert(t("sign_up") + " " + t("success"));
       router.back();
     } catch (error: any) {
-      Alert.alert("Registration Error", error.message);
+      Alert.alert(t("registration_error"), error.message);
     }
   };
 
@@ -91,41 +111,45 @@ const Register = () => {
       contentContainerStyle={styles.container}
       showsVerticalScrollIndicator={false}
     >
+
+        {/* <LanguageSelector /> */}
+      <View style={{ position: "absolute", top: 40, right: 10, zIndex: 1000 }}>
+        <LanguageSelector />
+      </View>
       <View style={styles.imageContainer}>
         <Image
-          source={require("@/assets/images/welcome.jpeg")}
+          source={require("@/assets/images/welcome.png")}
           style={styles.image}
           resizeMode="stretch"
         />
       </View>
 
       <View style={styles.textContainer}>
-        <Text style={styles.title}>Create Account</Text>
-        <Text style={styles.subtitle}>
-          “Fast, trusted roadside help at your fingertips.”
-        </Text>
+        <Text style={styles.title}>{t("register_title")}</Text>
+        <Text style={styles.subtitle}>{t("register_subtitle")}</Text>
       </View>
 
       <View style={styles.inputContainer}>
         <RegisterInput
-          label="Name"
-          placeholder="Enter Name"
+          key={currentLang} //
+          label={t("name_placeholder")}
+          placeholder={t("name_placeholder")}
           value={name}
           onChangeText={setName}
         />
         <RegisterInput
-          label="Email"
-          placeholder="Enter Email"
+          key={currentLang} //
+          label={t("email_placeholder")}
+          placeholder={t("email_placeholder")}
           value={email}
           onChangeText={setEmail}
         />
         <RegisterInput
-          label="Password"
-          placeholder="Enter Password"
+          label={t("password_placeholder")}
+          placeholder={t("password_placeholder")}
           value={password}
           onChangeText={setPassword}
           secureTextEntry={!showPassword}
-          // autoCorrect={false}
           keyboardType="default"
           rightIcon={
             <Pressable onPress={() => setShowPassword(!showPassword)}>
@@ -138,19 +162,18 @@ const Register = () => {
           }
         />
         <RegisterInput
-          label="Confirm Password"
-          placeholder="Confirm Password"
+          label={t("confirm_password_placeholder")}
+          placeholder={t("confirm_password_placeholder")}
           value={confirmPassword}
           onChangeText={setConfirmPassword}
           secureTextEntry={!showConfirmPassword}
-          // autoCorrect={false}
           keyboardType="default"
           rightIcon={
             <Pressable
               onPress={() => setShowConfirmPassword(!showConfirmPassword)}
             >
               <Ionicons
-                name={showPassword ? "eye-outline" : "eye-off-outline"}
+                name={showConfirmPassword ? "eye-outline" : "eye-off-outline"}
                 size={22}
                 color="#777"
               />
@@ -158,8 +181,8 @@ const Register = () => {
           }
         />
         <RegisterInput
-          label="Contact Ph#"
-          placeholder="Enter Contact Number"
+          label={t("contact_placeholder")}
+          placeholder={t("contact_placeholder")}
           value={contact}
           keyboardType="numeric"
           onChangeText={setContact}
@@ -167,39 +190,39 @@ const Register = () => {
       </View>
 
       <RegisterPicker
-        label="Register As"
+        label={t("register_as")}
         selectedValue={role}
         onValueChange={(value: string) => setRole(value)}
         options={[
-          { label: "Customer", value: "customer" },
-          { label: "Mechanic", value: "mechanic" },
+          { label: t("customer"), value: "customer", key: "customer" },
+          { label: t("mechanic"), value: "mechanic", key: "mechanic" },
         ]}
       />
 
       {role === "mechanic" && (
         <View style={styles.inputContainer}>
           <RegisterInput
-            label="Workshop Name"
-            placeholder="Enter workshop name"
+            label={t("workshop_name_placeholder")}
+            placeholder={t("workshop_name_placeholder")}
             value={workshopName}
             onChangeText={setWorkshopName}
           />
           <RegisterInput
-            label="Experience (years)"
-            placeholder="Enter experience"
+            label={t("experience_placeholder")}
+            placeholder={t("experience_placeholder")}
             value={experience}
             onChangeText={setExperience}
             keyboardType="numeric"
           />
           <RegisterInput
-            label="Specialization"
-            placeholder="e.g. Tires, Engine, Battery"
+            label={t("specialization_placeholder")}
+            placeholder={t("specialization_placeholder")}
             value={specialization}
             onChangeText={setSpecialization}
           />
           <RegisterInput
-            label="CNIC / License Number"
-            placeholder="Enter CNIC or License"
+            label={t("cnic_placeholder")}
+            placeholder={t("cnic_placeholder")}
             value={cnic}
             onChangeText={setCnic}
           />
@@ -214,17 +237,21 @@ const Register = () => {
           <View
             style={[styles.checkbox, rememberMe && styles.checkboxChecked]}
           />
-          <Text style={styles.rememberText}>Remember me</Text>
+          <Text style={styles.rememberText}>{t("remember_me")}</Text>
         </Pressable>
         <Pressable onPress={() => console.log("Forgot Password pressed")}>
-          <Text style={styles.forgotText}>Forgot Password</Text>
+          <Text style={styles.forgotText}>{t("forgot_password")}</Text>
         </Pressable>
       </View>
 
       <View style={styles.buttonContainer}>
-        <RegisterButton title="Sign Up" type="primary" onPress={handleSignUp} />
         <RegisterButton
-          title="Cancel"
+          title={t("sign_up")}
+          type="primary"
+          onPress={handleSignUp}
+        />
+        <RegisterButton
+          title={t("cancel")}
           type="secondary"
           onPress={() => router.back()}
         />
@@ -234,6 +261,8 @@ const Register = () => {
 };
 
 export default Register;
+
+// styles stay the same
 
 const styles = StyleSheet.create({
   container: {
@@ -281,7 +310,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    paddingHorizontal: 30,
+
     marginTop: 6,
     marginBottom: 20,
   },

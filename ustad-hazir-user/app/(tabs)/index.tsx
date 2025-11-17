@@ -13,6 +13,9 @@ import {
   View,
 } from "react-native";
 import Swiper from "react-native-swiper";
+import { useTranslation } from "react-i18next";
+import { I18nManager, Alert } from "react-native";
+import { deleteVehicle } from "@/backend/vehicleService";
 
 const banners = [
   {
@@ -35,21 +38,67 @@ const banners = [
   },
 ];
 export const carServices = [
-  { id: 1, categoryId: 1, title: "Oil Change", icon: "speedometer-outline" },
-  { id: 2, categoryId: 2, title: "Engine Repair", icon: "cog-outline" },
-  { id: 3, categoryId: 3, title: "Tire Service", icon: "ellipse-outline" },
-  { id: 4, categoryId: 4, title: "Battery Check", icon: "flash-outline" },
-  { id: 5, categoryId: 5, title: "AC Service", icon: "snow-outline" },
-  { id: 6, categoryId: 6, title: "Car Wash", icon: "water-outline" },
-  { id: 7, categoryId: 7, title: "Inspection", icon: "document-text-outline" },
-  { id: 8, categoryId: 8, title: "Painting", icon: "color-palette-outline" },
-  { id: 9, categoryId: 8, title: "Painting", icon: "color-palette-outline" },
+  {
+    id: 1,
+    categoryId: 1,
+    title: "Oil Change",
+    image: require("@/assets/images/icons/oilChange.png"),
+  },
+  {
+    id: 2,
+    categoryId: 2,
+    title: "Engine Repair",
+    image: require("@/assets/images/icons/engineRepair.png"),
+  },
+  {
+    id: 3,
+    categoryId: 3,
+    title: "Tyre Service",
+    image: require("@/assets/images/icons/tyreService1.png"),
+  },
+  {
+    id: 4,
+    categoryId: 4,
+    title: "Battery Check",
+    image: require("@/assets/images/icons/batteryCheck.png"),
+  },
+  {
+    id: 5,
+    categoryId: 5,
+    title: "AC Service",
+    image: require("@/assets/images/icons/acRepair.png"),
+  },
+  {
+    id: 6,
+    categoryId: 6,
+    title: "Car Wash",
+    image: require("@/assets/images/icons/carWash.png"),
+  },
+  {
+    id: 7,
+    categoryId: 7,
+    title: "Car Inspection",
+    image: require("@/assets/images/icons/carinspection.png"),
+  },
+  {
+    id: 8,
+    categoryId: 8,
+    title: "Body Paint",
+    image: require("@/assets/images/icons/carPaint.png"),
+  },
+  {
+    id: 9,
+    categoryId: 9,
+    title: "Wheel Alignment",
+    image: require("@/assets/images/icons/wheel.png"),
+  },
 ];
 
 const HomeScreen = () => {
   const [currentUserData, setCurrentUserData] = useState<{ name?: string }>({});
   const [vehicles, setVehicles] = useState([]);
   const [requests, setRequests] = useState([]); // ✅ new state
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     const user = auth.currentUser;
@@ -64,6 +113,25 @@ const HomeScreen = () => {
 
     return () => unsubscribe();
   }, []);
+
+  // useEffect(() => {
+  //   // Enable RTL if Urdu
+  //   if (i18n.language === "ur" && !I18nManager.isRTL) {
+  //     I18nManager.forceRTL(true);
+  //     Alert.alert(
+  //       "Restart Required",
+  //       "Please restart the app to apply Urdu layout"
+  //     );
+  //   }
+  //   // Disable RTL for other languages
+  //   else if (i18n.language !== "ur" && I18nManager.isRTL) {
+  //     I18nManager.forceRTL(true);
+  //     // Alert.alert(
+  //     //   "Restart Required",
+  //     //   "Please restart the app to apply English layout"
+  //     // );
+  //   }
+  // }, [i18n.language]);
 
   useEffect(() => {
     const currentUser = auth.currentUser;
@@ -109,9 +177,29 @@ const HomeScreen = () => {
   };
 
   const handleDelete = (vehicle: any) => {
-    console.log("Delete vehicle:", vehicle);
-    // Call your delete function here
+    Alert.alert(t("confirm_delete_title"), t("confirm_delete_message"), [
+      { text: t("cancel"), style: "cancel" },
+      {
+        text: t("delete"),
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await deleteVehicle(vehicle.id); // <-- FIXED
+            Alert.alert(t("vehicle_deleted"));
+            setVehicles(vehicles.filter((v) => v.id !== vehicle.id)); // <-- FIXED
+          } catch (error) {
+            console.error(error);
+            Alert.alert(t("delete_failed"));
+          }
+        },
+      },
+    ]);
   };
+
+  // const handleDelete = (vehicle: any) => {
+  //   console.log("Delete vehicle:", vehicle);
+  //   // Call your delete function here
+  // };
   const renderCategory = ({ item }) => (
     <Pressable style={styles.categoryCard} key={item.id}>
       <Image source={item.image} resizeMode="cover" style={styles.tile} />
@@ -120,12 +208,20 @@ const HomeScreen = () => {
   );
 
   const renderService = ({ item }) => (
-    <Pressable style={styles.categoryCard} key={item.id}>
-      <Ionicons
-        name={item.icon || "construct-outline"}
-        size={40}
-        color="#0D47A1"
+    <Pressable
+      style={styles.categoryCard}
+      key={item.id}
+      onPress={() =>
+        router.push(
+          `/listServices?serviceName=${encodeURIComponent(item.title)}`
+        )
+      }
+    >
+      <Image
+        source={item.image}
+        style={{ width: 50, height: 50, resizeMode: "contain" }}
       />
+
       <Text style={styles.categoryText}>{item.title}</Text>
     </Pressable>
   );
@@ -136,13 +232,14 @@ const HomeScreen = () => {
 
       <View style={styles.greetingContainer}>
         <Text style={styles.greeting}>
-          Hello,{" "}
+          {t("hello")},{" "}
           <Text style={styles.greetingName}>
-            {currentUserData.name || "User"}
+            {currentUserData.name || t("user")}
           </Text>{" "}
           👋
         </Text>
-        <Text style={styles.subText}>Your trusted mechanic is ready 🚗</Text>
+
+        <Text style={styles.subText}>{t("trusted_mechanic_ready")}</Text>
       </View>
 
       {/* Banner */}
@@ -184,9 +281,9 @@ const HomeScreen = () => {
 
       {/* Services */}
       <View style={styles.serviceHeader}>
-        <Text style={styles.serviceTitle}>Our Services</Text>
+        <Text style={styles.serviceTitle}>{t("our_services")}</Text>
         <Pressable>
-          <Text style={styles.viewAll}>View All</Text>
+          <Text style={styles.viewAll}>{t("view_all")}</Text>
         </Pressable>
       </View>
 
@@ -214,10 +311,10 @@ const HomeScreen = () => {
       {/* Vehicles Section */}
       <View style={styles.vehicleSection}>
         <View style={styles.serviceHeader}>
-          <Text style={styles.serviceTitle}>My Vehicles History</Text>
+          <Text style={styles.serviceTitle}>{t("my_vehicle_history")}</Text>
           {vehicles.length > 0 && (
             <Pressable onPress={() => router.push("/allVehicles")}>
-              <Text style={styles.viewAll}>View All</Text>
+              <Text style={styles.addVehicleText}>{t("add_vehicle")}</Text>
             </Pressable>
           )}
         </View>
@@ -229,7 +326,7 @@ const HomeScreen = () => {
               style={styles.addVehicleCard}
             >
               <Ionicons name="add-circle-outline" size={40} color="#0D47A1" />
-              <Text style={styles.addVehicleText}>Add Vehicle</Text>
+              <Text style={styles.addVehicleText}>{t("add_vehicle")}</Text>
             </Pressable>
           </View>
         ) : (
@@ -270,13 +367,13 @@ const HomeScreen = () => {
                     style={[styles.button, { backgroundColor: "#0D47A1" }]}
                     onPress={() => handleEdit(item)}
                   >
-                    <Text style={styles.buttonText}>Edit</Text>
+                    <Text style={styles.buttonText}>{t("edit")}</Text>
                   </Pressable>
                   <Pressable
                     style={[styles.button, { backgroundColor: "#FF3B30" }]}
                     onPress={() => handleDelete(item)}
                   >
-                    <Text style={styles.buttonText}>Delete</Text>
+                    <Text style={styles.buttonText}>{t("delete")}</Text>
                   </Pressable>
                 </View>
               </Pressable>
@@ -288,10 +385,10 @@ const HomeScreen = () => {
       {/* Service History Section */}
       <View style={styles.vehicleSection}>
         <View style={styles.serviceHeader}>
-          <Text style={styles.serviceTitle}>My Request History</Text>
+          <Text style={styles.serviceTitle}>{t("my_request_history")}</Text>
           {requests.length > 0 && (
             <Pressable onPress={() => router.push("/allRequests")}>
-              <Text style={styles.viewAll}>View All</Text>
+              <Text style={styles.addVehicleText}>{t("request_service")}</Text>
             </Pressable>
           )}
         </View>
@@ -303,7 +400,7 @@ const HomeScreen = () => {
               style={styles.addVehicleCard}
             >
               <Ionicons name="add-circle-outline" size={40} color="#0D47A1" />
-              <Text style={styles.addVehicleText}>Request Service</Text>
+              <Text style={styles.addVehicleText}>{t("request_service")}</Text>
             </Pressable>
           </View>
         ) : (
@@ -353,7 +450,7 @@ const HomeScreen = () => {
                   </View>
 
                   <View style={styles.serviceCardFooter}>
-                    <Pressable
+                    {/* <Pressable
                       style={[styles.actionBtn, { backgroundColor: "#0D47A1" }]}
                       onPress={() => router.push(`/servicedetail/${item.id}`)}
                     >
@@ -363,8 +460,8 @@ const HomeScreen = () => {
                       style={[styles.actionBtn, { backgroundColor: "#FF3B30" }]}
                       onPress={() => console.log("Delete service record")}
                     >
-                      <Text style={styles.actionText}>Delete</Text>
-                    </Pressable>
+                      <Text style={styles.actionText}>{t("delete")}</Text>
+                    </Pressable> */}
                   </View>
                 </Pressable>
               );
@@ -416,7 +513,7 @@ const styles = StyleSheet.create({
   },
   bannerContainer: {
     height: 160,
-    marginHorizontal:20,
+    marginHorizontal: 20,
     marginVertical: 15,
     borderRadius: 15,
     overflow: "hidden",
@@ -505,7 +602,7 @@ const styles = StyleSheet.create({
   categoryCard: {
     alignItems: "center",
     justifyContent: "space-between",
-    gap:10,
+    gap: 10,
 
     backgroundColor: "#f0f4ff",
     borderRadius: 12,

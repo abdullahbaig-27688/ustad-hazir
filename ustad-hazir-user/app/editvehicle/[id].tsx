@@ -1,21 +1,13 @@
 // app/(tabs)/editvehicle/[id].tsx
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Pressable,
-  Alert,
-  ScrollView,
-} from "react-native";
-import Header from "@/components/Header";
+import { Text, View, ScrollView, Alert, StyleSheet } from "react-native";
+import EditVehicleHeader from "@/components/Header";
 import InputField from "@/components/InputField";
+import EditVehicleButton from "@/components/Button";
 import { useRouter, useLocalSearchParams } from "expo-router";
-
-import Button from "@/components/Button";
 import { getSingleVehicle, updateVehicle } from "@/backend/vehicleService";
-
+import { useTranslation } from "react-i18next";
+import { Picker } from "@react-native-picker/picker";
 
 interface Vehicle {
   id: string;
@@ -24,7 +16,6 @@ interface Vehicle {
   year: string;
   registration: string;
   type: string;
-
   transmission: string;
   fueltype: string;
   color: string;
@@ -32,6 +23,7 @@ interface Vehicle {
 }
 
 const EditVehicle = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   const params = useLocalSearchParams();
   const vehicleId = params.id as string;
@@ -55,11 +47,10 @@ const EditVehicle = () => {
         const data = await getSingleVehicle(vehicleId);
         setVehicle(data as Vehicle);
       } catch (error) {
-        Alert.alert("Error", "Vehicle not found");
+        Alert.alert(t("error"), t("vehicle_not_found"));
         router.back();
       }
     };
-
     fetchVehicle();
   }, [vehicleId]);
 
@@ -68,7 +59,7 @@ const EditVehicle = () => {
   };
 
   const handleSave = async () => {
-    const requiredFields = [
+    const requiredFields: (keyof Vehicle)[] = [
       "brand",
       "model",
       "year",
@@ -80,86 +71,146 @@ const EditVehicle = () => {
 
     for (const field of requiredFields) {
       if (!vehicle[field]) {
-        Alert.alert("Error", `Please fill in the ${field} field.`);
+        Alert.alert(
+          t("error"),
+          t("fill_field_error", { field: t(`${field}_label`) })
+        );
         return;
       }
     }
 
     try {
       await updateVehicle(vehicleId, vehicle);
-      Alert.alert("Success", "Vehicle updated successfully!");
+      Alert.alert(t("edit_vehicle"), t("vehicle_update_success"));
       router.back();
     } catch (error) {
       console.error("Error updating vehicle:", error);
-      Alert.alert("❌ Failed to update vehicle");
+      Alert.alert(t("vehicle_update_failed"));
     }
   };
 
   return (
     <View style={styles.container}>
-      <Header title="Edit Vehicle" showBack />
+      <EditVehicleHeader title={t("edit_vehicle")} showBack />
 
-      <ScrollView
-        // style={styles.container}
-        contentContainerStyle={{ padding: 20 }}
-      >
-        {/* <Text style={styles.title}>Edit Vehicle</Text> */}
+      <ScrollView contentContainerStyle={{ padding: 20 }}>
+        <Text style={styles.label}>{t("brand_label")}</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={vehicle.brand}
+            onValueChange={(value) => setVehicle({ ...vehicle, brand: value })}
+          >
+            <Picker.Item label={t("select_brand")} value="" />
+            {[
+              "Toyota",
+              "Honda",
+              "Suzuki",
+              "Nissan",
+              "Ford",
+              "Kia",
+              "Hyundai",
+              "Other",
+            ].map((brand) => (
+              <Picker.Item key={brand} label={brand} value={brand} />
+            ))}
+          </Picker>
+        </View>
 
-        {/* <Text style={styles.label}>Brand</Text> */}
+        <Text style={styles.label}>{t("model_label")}</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={vehicle.model}
+            onValueChange={(value) => setVehicle({ ...vehicle, model: value })}
+          >
+            <Picker.Item label={t("select_model")} value="" />
+            {[
+              "Corolla",
+              "Civic",
+              "Accord",
+              "Civic Type R",
+              "Altis",
+              "City",
+              "Fortuner",
+              "Hilux",
+              "Other",
+            ].map((model) => (
+              <Picker.Item key={model} label={model} value={model} />
+            ))}
+          </Picker>
+        </View>
+
+        <Text style={styles.label}>{t("year_label")}</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={vehicle.year}
+            onValueChange={(value) => setVehicle({ ...vehicle, year: value })}
+          >
+            <Picker.Item label={t("select_year")} value="" />
+            {Array.from({ length: 30 }, (_, i) => (2025 - i).toString()).map(
+              (y) => (
+                <Picker.Item key={y} label={y} value={y} />
+              )
+            )}
+          </Picker>
+        </View>
+
         <InputField
-          label="Brand / Make"
-          placeholder="e.g. Toyota, Honda"
-          value={vehicle.brand}
-          //   style={styles.input}
-          onChangeText={(text) => handleChange("brand", text)}
-        />
-
-        <InputField
-          label="Model"
-          placeholder="e.g. Corolla 2020"
-          value={vehicle.model}
-          onChangeText={(text) => handleChange("model", text)}
-        />
-
-        <InputField
-          label="Year"
-          placeholder="2020, 2021, 2022"
-          value={vehicle.year}
-          onChangeText={(text) => handleChange("year", text)}
-        />
-
-        <InputField
-          label="Registration Number"
-          placeholder="Enter registration number"
+          label={t("registration_label")}
+          placeholder={t("registration_placeholder")}
           value={vehicle.registration}
           onChangeText={(text) => handleChange("registration", text)}
         />
-        <InputField
-          label="Vehicle Type"
-          placeholder="Car, Bike, Truck..."
-          value={vehicle.type}
-          onChangeText={(text) => handleChange("type", text)}
-        />
-        <InputField
-          label="Transmission Type"
-          placeholder="Automatic, Manual, CVT..."
-          value={vehicle.transmission}
-          onChangeText={(text) => handleChange("transmission", text)}
-        />
-        <InputField
-          label="Fuel Type"
-          placeholder="Hi-Octane, Diesal, Gasoline..."
-          value={vehicle.fueltype}
-          onChangeText={(text) => handleChange("fueltype", text)}
-        />
-        <InputField
-          label="Color (optional)"
-          placeholder="e.g. White"
-          value={vehicle.color}
-          onChangeText={(text) => handleChange("color", text)}
-        />
 
-        <Button title="Edit Vehicle" type="primary" onPress={handleSave} />
+        <Text style={styles.label}>{t("vehicle_type_label")}</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={vehicle.type}
+            onValueChange={(value) => setVehicle({ ...vehicle, type: value })}
+          >
+            <Picker.Item label={t("select_type")} value="" />
+            {["Car", "Bike", "Truck", "Van", "SUV"].map((type) => (
+              <Picker.Item key={type} label={type} value={type} />
+            ))}
+          </Picker>
+        </View>
+
+        <Text style={styles.label}>{t("transmission_label")}</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={vehicle.transmission}
+            onValueChange={(value) =>
+              setVehicle({ ...vehicle, transmission: value })
+            }
+          >
+            <Picker.Item label={t("select_transmission")} value="" />
+            {["Automatic", "Manual", "CVT"].map((t) => (
+              <Picker.Item key={t} label={t} value={t} />
+            ))}
+          </Picker>
+        </View>
+
+        <Text style={styles.label}>{t("fuel_label")}</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={vehicle.fueltype}
+            onValueChange={(value) =>
+              setVehicle({ ...vehicle, fueltype: value })
+            }
+          >
+            <Picker.Item label={t("select_fuel")} value="" />
+            {["Hi-Octane", "Diesel", "Gasoline", "Electric", "Hybrid"].map(
+              (f) => (
+                <Picker.Item key={f} label={f} value={f} />
+              )
+            )}
+          </Picker>
+        </View>
+
+        <EditVehicleButton
+          title={t("edit_vehicle_button")}
+          type="primary"
+          onPress={handleSave}
+        />
       </ScrollView>
     </View>
   );
@@ -171,6 +222,12 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
   title: { fontSize: 22, fontWeight: "bold", marginBottom: 20 },
   label: { fontSize: 14, fontWeight: "bold", marginTop: 10 },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    marginVertical: 6,
+  },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",

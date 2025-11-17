@@ -1,0 +1,61 @@
+.mechanic-header {
+  display: flex;
+  justify-content: space-between; /* push heading left, button right */
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.mechanic-details {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.back-btn {
+  padding: 6px 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.details-card {
+  background-color: #1a1a1a;
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.service-section {
+  margin-top: 20px;
+}
+
+.service-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.service-card {
+  background-color: #222;
+  color: #fff;
+  width: 260px;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.service-info {
+  padding: 10px;
+  font-size: 14px;
+}
+.service-info p {
+  margin: 3px 0;
+  font-size: 14px;
+}
+
+.service-card strong {
+  color: #ccc;
+}

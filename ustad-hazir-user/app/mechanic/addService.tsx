@@ -6,14 +6,16 @@ import {
   Alert,
   Pressable,
   Text,
+  Platform,
 } from "react-native";
 import AddServiceHeader from "@/components/Header";
 import InputField from "@/components/InputField";
-import ServiceButton from "@/components/Button";
-import { addService } from "@/backend/machenicService"; // ✅ imported from CRUD
+import AddServiceButton from "@/components/Button";
+import { addService } from "@/backend/machenicService";
 import { router } from "expo-router";
 import * as Location from "expo-location";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Picker } from "@react-native-picker/picker";
 
 const ServicePricing = () => {
   const [serviceName, setServiceName] = useState("");
@@ -24,7 +26,7 @@ const ServicePricing = () => {
   const [location, setLocation] = useState<any>(null);
   const [locationLoading, setLocationLoading] = useState(false);
 
-  // ✅ Get location with address details
+  // ✅ Get location with address
   const getCurrentLocation = async () => {
     setLocationLoading(true);
     try {
@@ -90,13 +92,28 @@ const ServicePricing = () => {
     <SafeAreaView style={styles.container}>
       <AddServiceHeader title="Add Service" showBack />
       <ScrollView contentContainerStyle={styles.content}>
-        <InputField
-          label="Service Name"
-          placeholder="Enter your Service"
-          value={serviceName}
-          onChangeText={setServiceName}
-        />
+        {/* Service Type Picker */}
+        <Text style={styles.sectionLabel}>Service</Text>
+        <View style={styles.pickerWrapper}>
+          <Picker
+            selectedValue={serviceName}
+            onValueChange={(val) => setServiceName(val)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Select Service Type" value="" />
+            <Picker.Item label="Oil Change" value="oil_change" />
+            <Picker.Item label="Engine Repair" value="engine_repair" />
+            <Picker.Item label="Tyre Repair" value="tyre_repair" />
+            <Picker.Item label="Battery Check" value="battery_check" />
+            <Picker.Item label="AC Service" value="ac_service" />
+            <Picker.Item label="Car Wash" value="car_wash" />
+            <Picker.Item label="Car Inspection" value="car_inspection" />
+            <Picker.Item label="Body Paint" value="body_paint" />
+            <Picker.Item label="Wheel Alignment" value="wheel_alignment" />
+          </Picker>
+        </View>
 
+        {/* Description */}
         <InputField
           label="Enter Description"
           placeholder="Provide Service Description"
@@ -107,6 +124,7 @@ const ServicePricing = () => {
           style={{ height: 100, textAlignVertical: "top" }}
         />
 
+        {/* Price */}
         <InputField
           label="Price (PKR)"
           placeholder="Enter Price"
@@ -115,6 +133,7 @@ const ServicePricing = () => {
           onChangeText={setPrice}
         />
 
+        {/* Estimated Time */}
         <InputField
           label="Estimated Time"
           placeholder="e.g. 1 hour"
@@ -122,14 +141,24 @@ const ServicePricing = () => {
           onChangeText={setDuration}
         />
 
-        <InputField
-          label="Category"
-          placeholder="Car / Bike / Electric"
-          value={category}
-          onChangeText={setCategory}
-        />
+        {/* Category Picker */}
+        <Text style={styles.sectionLabel}>Category</Text>
+        <View style={styles.pickerWrapper}>
+          <Picker
+            selectedValue={category}
+            onValueChange={(val) => setCategory(val)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Select Vehicle Type" value="" />
+            <Picker.Item label="Car" value="car" />
+            <Picker.Item label="Bike" value="bike" />
+            <Picker.Item label="Truck" value="truck" />
+            <Picker.Item label="Van" value="van" />
+            <Picker.Item label="SUV" value="suv" />
+          </Picker>
+        </View>
 
-        {/* ✅ Location Section */}
+        {/* Location */}
         <View style={{ marginVertical: 10 }}>
           <Text style={{ fontWeight: "bold", marginBottom: 6 }}>
             Current Location
@@ -147,7 +176,8 @@ const ServicePricing = () => {
           </Pressable>
         </View>
 
-        <ServiceButton
+        {/* Add Service Button */}
+        <AddServiceButton
           title="Add Service"
           type="primary"
           onPress={handleAddService}
@@ -167,5 +197,23 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     alignItems: "center",
+  },
+  sectionLabel: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 15,
+    color: "#333",
+  },
+  pickerWrapper: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 10,
+    overflow: "hidden",
+    backgroundColor: "#f9f9f9",
+    marginBottom: 15,
+  },
+  picker: {
+    width: "100%",
+    height: Platform.OS === "ios" ? 200 : 50,
   },
 });

@@ -1,0 +1,102 @@
+.admin-wrapper {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  /* background: url("https://www.datocms-assets.com/49357/1693204664-roadside-under-car-bonnet.jpg?auto=format&crop=focalpoint&fit=crop")
+    no-repeat center center; */
+  background-size: cover;
+  position: relative;
+  color: #fff;
+  overflow: hidden;
+}
+
+.admin-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  z-index: 0;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background-color: rgba(0, 0, 0, 0.85);
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+.sidebar h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sidebar ul li:hover {
+  background-color: #007bff;
+}
+
+/* Content */
+.admin-content {
+  flex: 1;
+  padding: 40px;
+  position: relative;
+  z-index: 1;
+  overflow-y: auto;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+/* Cards */
+.dashboard-content {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background-color: rgba(0, 0, 0, 0.65);
+  border-radius: 10px;
+  padding: 25px 30px;
+  width: 250px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-btn {
+  margin-top: 15px;
+  background-color: #007bff;
+  border: none;
+  padding: 8px 15px;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.card-btn:hover {
+  background-color: #0056b3;
+}

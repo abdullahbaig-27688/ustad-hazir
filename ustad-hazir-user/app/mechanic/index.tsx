@@ -149,7 +149,7 @@ const HomeScreen = () => {
       <View style={{ flex: 1 }}>
         <Text style={styles.jobService}>{item.serviceType}</Text>
         <Text>Customer: {item.customerName}</Text>
-        <Text>Vehicle: {item.vehicleName}</Text> 
+        <Text>Vehicle: {item.vehicleName}</Text>
         <Text style={styles.jobTime}>
           {item.createdAt
             ? new Date(item.createdAt.seconds * 1000).toLocaleString()

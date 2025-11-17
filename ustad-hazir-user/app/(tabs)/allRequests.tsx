@@ -5,6 +5,7 @@ import { useRouter } from "expo-router";
 import { Timestamp, doc, getDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { FlatList, Image, StyleSheet, Text, View } from "react-native";
+import { useTranslation } from "react-i18next";
 
 interface ServiceRequest {
   id: string;
@@ -41,6 +42,7 @@ const fetchVehicleDetails = async (vehicleId: string) => {
 
 const AllServiceRequests = () => {
   const router = useRouter();
+  const { t } = useTranslation();
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -75,7 +77,7 @@ const AllServiceRequests = () => {
   }, []);
 
   const renderItem = ({ item }: { item: ServiceRequest }) => {
-    let createdAtString = "N/A";
+    let createdAtString = t("na");
     if (item.createdAt) {
       if (typeof item.createdAt === "object" && "toDate" in item.createdAt) {
         createdAtString = item.createdAt.toDate().toLocaleString();
@@ -91,35 +93,48 @@ const AllServiceRequests = () => {
         )}
         <View style={styles.details}>
           <Text style={styles.title}>
-            {item.serviceType ?? "Service Request"}
+            {item.serviceType ?? t("service_request")}
           </Text>
 
           {/* Vehicle Info */}
           <Text style={styles.text}>
-            Vehicle: {item.vehicleBrand} {item.vehicleName} {item.vehicleModel}
+            {t("vehicle")}: {item.vehicleBrand} {item.vehicleName}{" "}
+            {item.vehicleModel}
           </Text>
-          <Text style={styles.text}>Plate: {item.registration ?? "N/A"}</Text>
+          <Text style={styles.text}>
+            {t("plate")}: {item.registration ?? t("na")}
+          </Text>
 
           {/* Optional fields */}
           {item.preferredDate && (
             <Text style={styles.text}>
-              Preferred Date: {item.preferredDate}
+              {t("preferred_date")}: {item.preferredDate}
             </Text>
           )}
           {item.pickupAddress && (
-            <Text style={styles.text}>Pickup: {item.pickupAddress}</Text>
+            <Text style={styles.text}>
+              {t("pickup")}: {item.pickupAddress}
+            </Text>
           )}
           {item.dropoffAddress && (
-            <Text style={styles.text}>Dropoff: {item.dropoffAddress}</Text>
+            <Text style={styles.text}>
+              {t("dropoff")}: {item.dropoffAddress}
+            </Text>
           )}
 
-          <Text style={styles.text}>Issue: {item.issueDesc}</Text>
+          <Text style={styles.text}>
+            {t("issue")}: {item.issueDesc}
+          </Text>
 
           {/* Status */}
-          <Text style={styles.status}>Status: {item.status ?? "Pending"}</Text>
+          <Text style={styles.status}>
+            {t("status")}: {item.status ?? t("pending")}
+          </Text>
 
           {/* Created Date */}
-          <Text style={styles.date}>Created: {createdAtString}</Text>
+          <Text style={styles.date}>
+            {t("created")}: {createdAtString}
+          </Text>
         </View>
       </View>
     );
@@ -128,13 +143,13 @@ const AllServiceRequests = () => {
   return (
     <View style={styles.container}>
       <Header
-        title="Service Request History"
+        title={t("service_request_history")}
         showBack={true}
         rightIcon="add"
         onRightPress={() => router.push("/(tabs)/requestservice")}
       />
       {loading ? (
-        <Text style={styles.loading}>Loading service history...</Text>
+        <Text style={styles.loading}>{t("loading_service_history")}</Text>
       ) : (
         <FlatList
           data={requests}
@@ -142,7 +157,7 @@ const AllServiceRequests = () => {
           renderItem={renderItem}
           contentContainerStyle={{ padding: 20, paddingBottom: 40 }}
           ListEmptyComponent={
-            <Text style={styles.empty}>No requests found.</Text>
+            <Text style={styles.empty}>{t("no_requests_found")}</Text>
           }
         />
       )}

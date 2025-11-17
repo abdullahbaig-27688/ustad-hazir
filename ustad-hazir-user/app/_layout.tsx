@@ -26,14 +26,15 @@ export default function RootLayout() {
           <Stack.Screen name="login" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="mechanic" options={{ headerShown: false }} />
+          <Stack.Screen name="listServices" options={{ headerShown: false }} />
           <Stack.Screen
             name="editvehicle/[id]"
             options={{ headerShown: false }}
           />
-          {/* <Stack.Screen name="allVehicles" options={{ headerShown: false }} />
-          <Stack.Screen name="allRequests" options={{ headerShown: false }} />
-          <Stack.Screen name="allServices" options={{ headerShown: false }} />
-          <Stack.Screen name="mechanic" options={{ headerShown: false }} /> */}
+          <Stack.Screen
+            name="editservice/[id]"
+            options={{ headerShown: false }}
+          />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>

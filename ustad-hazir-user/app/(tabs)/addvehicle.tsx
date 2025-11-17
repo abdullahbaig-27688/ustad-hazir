@@ -1,5 +1,5 @@
-import Button from "@/components/Button";
-import Header from "@/components/Header";
+import AddVehicleButton from "@/components/Button";
+import AddVehicleHeader from "@/components/Header";
 import InputField from "@/components/InputField";
 import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
@@ -15,52 +15,12 @@ import {
 } from "react-native";
 import { addVehicle } from "@/backend/vehicleService";
 import { router } from "expo-router";
-
-const carBrands = [
-  "Toyota",
-  "Honda",
-  "Suzuki",
-  "Nissan",
-  "Ford",
-  "Kia",
-  "Hyundai",
-  "Other",
-];
-
-const carModels = [
-  "Corolla",
-  "Civic",
-  "Accord",
-  "Civic Type R",
-  "Altis",
-  "City",
-  "Fortuner",
-  "Hilux",
-  "Other",
-];
-
-const years = Array.from({ length: 30 }, (_, i) => (2025 - i).toString()); // last 30 years
-
-const vehicleTypes = ["'Car", "Bike", "Truck", "Van", "SUV"];
-const transmissionTypes = ["Automatic", "Manual", "CVT"];
-const fuelTypes = ["Hi-Octane", "Diesel", "Gasoline", "Electric", "Hybrid"];
-const colors = [
-  "White",
-  "Black",
-  "Silver",
-  "Gray",
-  "Red",
-  "Blue",
-  "Green",
-  "Yellow",
-  "Orange",
-  "Brown",
-  "Other",
-];
+import { useTranslation } from "react-i18next"; // ⬅️ ADDED
 
 const AddVehicleScreen = () => {
+  const { t } = useTranslation(); // ⬅️ ADDED
+
   const [vehicle, setVehicle] = useState({
-    // id:"",
     brand: "",
     model: "",
     year: "",
@@ -85,7 +45,6 @@ const AddVehicleScreen = () => {
   const handleSave = async () => {
     console.log("Vehicle Saved:", vehicle);
 
-    // Validate fields
     const requiredFields = [
       "brand",
       "model",
@@ -97,113 +56,107 @@ const AddVehicleScreen = () => {
     ];
     for (const field of requiredFields) {
       if (!vehicle[field]) {
-        Alert.alert(`Please fill in the ${field} field.`);
+        Alert.alert(t("fill_field_error").replace("{{field}}", t(field)));
         return;
       }
     }
 
     try {
-      await addVehicle(vehicle); // ✅ Using backend function now
-      Alert.alert("✅ Vehicle added successfully!");
+      await addVehicle(vehicle);
+      Alert.alert(t("vehicle_added_success"));
       router.back();
     } catch (error) {
       console.error("❌ Error saving vehicle:", error);
-      Alert.alert("❌ Failed to save vehicle. Please try again.");
+      Alert.alert(t("vehicle_add_failed"));
     }
   };
 
   return (
     <View style={styles.container}>
-      <Header title="Add Vehicle" showBack />
+      <AddVehicleHeader title={t("add_vehicle_title")} showBack />
+
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.label}>Brand / Make</Text>
+        <Text style={styles.label}>{t("brand_label")}</Text>
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={vehicle.brand}
             onValueChange={(value) => setVehicle({ ...vehicle, brand: value })}
           >
-            <Picker.Item label="Select Brand" value="" />
-            {carBrands.map((brand) => (
+            <Picker.Item label={t("select_brand")} value="" />
+            {[
+              "Toyota",
+              "Honda",
+              "Suzuki",
+              "Nissan",
+              "Ford",
+              "Kia",
+              "Hyundai",
+              "Other",
+            ].map((brand) => (
               <Picker.Item key={brand} label={brand} value={brand} />
             ))}
           </Picker>
         </View>
 
-        {/* <InputField
-          label="Brand / Make"
-          placeholder="e.g. Toyota, Honda"
-          value={vehicle.brand}
-          onChangeText={(t) => setVehicle({ ...vehicle, brand: t })}
-        /> */}
-
-        <Text style={styles.label}>Model</Text>
+        <Text style={styles.label}>{t("model_label")}</Text>
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={vehicle.model}
             onValueChange={(value) => setVehicle({ ...vehicle, model: value })}
           >
-            <Picker.Item label="Select Model" value="" />
-            {carModels.map((model) => (
+            <Picker.Item label={t("select_model")} value="" />
+            {[
+              "Corolla",
+              "Civic",
+              "Accord",
+              "Civic Type R",
+              "Altis",
+              "City",
+              "Fortuner",
+              "Hilux",
+              "Other",
+            ].map((model) => (
               <Picker.Item key={model} label={model} value={model} />
             ))}
           </Picker>
         </View>
 
-        {/* <InputField
-          label="Model"
-          placeholder="e.g. Corolla 2020"
-          value={vehicle.model}
-          onChangeText={(t) => setVehicle({ ...vehicle, model: t })}
-        /> */}
-        {/* Year Picker */}
-        <Text style={styles.label}>Year</Text>
+        <Text style={styles.label}>{t("year_label")}</Text>
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={vehicle.year}
             onValueChange={(value) => setVehicle({ ...vehicle, year: value })}
           >
-            <Picker.Item label="Select Year" value="" />
-            {years.map((y) => (
-              <Picker.Item key={y} label={y} value={y} />
-            ))}
+            <Picker.Item label={t("select_year")} value="" />
+            {Array.from({ length: 30 }, (_, i) => (2025 - i).toString()).map(
+              (y) => (
+                <Picker.Item key={y} label={y} value={y} />
+              )
+            )}
           </Picker>
         </View>
 
-        {/* <InputField
-          label="Year"
-          placeholder="2020, 2021, 2022"
-          value={vehicle.year}
-          onChangeText={(t) => setVehicle({ ...vehicle, year: t })}
-        /> */}
         <InputField
-          label="Registration Number"
-          placeholder="Enter registration number"
+          label={t("registration_label")}
+          placeholder={t("registration_placeholder")}
           value={vehicle.registration}
           onChangeText={(t) => setVehicle({ ...vehicle, registration: t })}
         />
 
-        {/* Vehicle Type Picker */}
-        <Text style={styles.label}>Vehicle Type</Text>
+        <Text style={styles.label}>{t("vehicle_type_label")}</Text>
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={vehicle.type}
             onValueChange={(value) => setVehicle({ ...vehicle, type: value })}
           >
-            <Picker.Item label="Select Type" value="" />
-            {vehicleTypes.map((type) => (
+            <Picker.Item label={t("select_type")} value="" />
+            {["Car", "Bike", "Truck", "Van", "SUV"].map((type) => (
               <Picker.Item key={type} label={type} value={type} />
             ))}
           </Picker>
         </View>
-        {/* <InputField
-          label="Vehicle Type"
-          placeholder="Car, Bike, Truck..."
-          value={vehicle.type}
-          onChangeText={(t) => setVehicle({ ...vehicle, type: t })}
-        /> */}
 
-        {/* Transmission Picker */}
-        <Text style={styles.label}>Transmission Type</Text>
+        <Text style={styles.label}>{t("transmission_label")}</Text>
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={vehicle.transmission}
@@ -211,21 +164,14 @@ const AddVehicleScreen = () => {
               setVehicle({ ...vehicle, transmission: value })
             }
           >
-            <Picker.Item label="Select Transmission" value="" />
-            {transmissionTypes.map((t) => (
+            <Picker.Item label={t("select_transmission")} value="" />
+            {["Automatic", "Manual", "CVT"].map((t) => (
               <Picker.Item key={t} label={t} value={t} />
             ))}
           </Picker>
         </View>
 
-        {/* <InputField
-          label="Transmission Type"
-          placeholder="Automatic, Manual, CVT..."
-          value={vehicle.transmission}
-          onChangeText={(t) => setVehicle({ ...vehicle, transmission: t })}
-        /> */}
-        {/* Fuel Type Picker */}
-        <Text style={styles.label}>Fuel Type</Text>
+        <Text style={styles.label}>{t("fuel_label")}</Text>
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={vehicle.fueltype}
@@ -233,41 +179,41 @@ const AddVehicleScreen = () => {
               setVehicle({ ...vehicle, fueltype: value })
             }
           >
-            <Picker.Item label="Select Fuel Type" value="" />
-            {fuelTypes.map((f) => (
-              <Picker.Item key={f} label={f} value={f} />
-            ))}
+            <Picker.Item label={t("select_fuel")} value="" />
+            {["Hi-Octane", "Diesel", "Gasoline", "Electric", "Hybrid"].map(
+              (f) => (
+                <Picker.Item key={f} label={f} value={f} />
+              )
+            )}
           </Picker>
         </View>
 
-        {/* <InputField
-          label="Fuel Type"
-          placeholder="Hi-Octane, Diesel, Gasoline..."
-          value={vehicle.fueltype}
-          onChangeText={(t) => setVehicle({ ...vehicle, fueltype: t })}
-        /> */}
-
-        <Text style={styles.label}>Color (optional)</Text>
+        <Text style={styles.label}>{t("color_label")}</Text>
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={vehicle.color}
             onValueChange={(value) => setVehicle({ ...vehicle, color: value })}
           >
-            <Picker.Item label="Select Color" value="" />
-            {colors.map((color) => (
+            <Picker.Item label={t("select_color")} value="" />
+            {[
+              "White",
+              "Black",
+              "Silver",
+              "Gray",
+              "Red",
+              "Blue",
+              "Green",
+              "Yellow",
+              "Orange",
+              "Brown",
+              "Other",
+            ].map((color) => (
               <Picker.Item key={color} label={color} value={color} />
             ))}
           </Picker>
         </View>
 
-        {/* <InputField
-          label="Color (optional)"
-          placeholder="e.g. White"
-          value={vehicle.color}
-          onChangeText={(t) => setVehicle({ ...vehicle, color: t })}
-        /> */}
-
-        <Text style={styles.label}>Vehicle Photo (optional)</Text>
+        <Text style={styles.label}>{t("photo_label")}</Text>
         <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
           {vehicle.image ? (
             <Image
@@ -275,11 +221,15 @@ const AddVehicleScreen = () => {
               style={styles.imagePreview}
             />
           ) : (
-            <Text style={styles.imagePickerText}>+ Add Photo</Text>
+            <Text style={styles.imagePickerText}>{t("add_photo")}</Text>
           )}
         </TouchableOpacity>
 
-        <Button title="Add Vehicle" type="primary" onPress={handleSave} />
+        <AddVehicleButton
+          title={t("add_vehicle_button")}
+          type="primary"
+          onPress={handleSave}
+        />
       </ScrollView>
     </View>
   );

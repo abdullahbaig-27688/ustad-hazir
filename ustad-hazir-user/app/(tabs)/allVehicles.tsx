@@ -3,6 +3,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 import { View, Text, FlatList, StyleSheet, Alert, Image } from "react-native";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
 import { getUserVehicles, deleteVehicle } from "@/backend/vehicleService";
@@ -22,6 +23,7 @@ interface Vehicle {
 
 const AllVehicles = () => {
   const router = useRouter();
+  const { t } = useTranslation();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -42,29 +44,26 @@ const AllVehicles = () => {
       fetchVehicles();
     }, [])
   );
+
   // ✅ Delete function
   const handleDelete = (id: string) => {
-    Alert.alert(
-      "Confirm Delete",
-      "Are you sure you want to delete this vehicle?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              await deleteVehicle(id);
-              Alert.alert("✅ Vehicle deleted!");
-              setVehicles(vehicles.filter((v) => v.id !== id));
-            } catch (error) {
-              console.error(error);
-              Alert.alert("❌ Failed to delete vehicle");
-            }
-          },
+    Alert.alert(t("confirm_delete_title"), t("confirm_delete_message"), [
+      { text: t("cancel"), style: "cancel" },
+      {
+        text: t("delete"),
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await deleteVehicle(id);
+            Alert.alert(t("vehicle_deleted"));
+            setVehicles(vehicles.filter((v) => v.id !== id));
+          } catch (error) {
+            console.error(error);
+            Alert.alert(t("delete_failed"));
+          }
         },
-      ]
-    );
+      },
+    ]);
   };
 
   const renderItem = ({ item }: { item: Vehicle }) => (
@@ -76,21 +75,33 @@ const AllVehicles = () => {
         <Text style={styles.title}>
           {item.brand} {item.model}
         </Text>
-        <Text>Year: {item.year}</Text>
-        <Text>Registration: {item.registration}</Text>
-        <Text>Type: {item.type}</Text>
-        <Text>Transmission: {item.transmission}</Text>
-        <Text>Fuel: {item.fueltype}</Text>
-        <Text>Color: {item.color}</Text>
+        <Text>
+          {t("year")}: {item.year}
+        </Text>
+        <Text>
+          {t("registration")}: {item.registration}
+        </Text>
+        <Text>
+          {t("type")}: {item.type}
+        </Text>
+        <Text>
+          {t("transmission")}: {item.transmission}
+        </Text>
+        <Text>
+          {t("fuel")}: {item.fueltype}
+        </Text>
+        <Text>
+          {t("color")}: {item.color}
+        </Text>
 
         <View style={styles.actions}>
           <Button
-            title="Edit"
+            title={t("edit")}
             type="secondary"
             onPress={() => router.push(`/editvehicle/${item.id}`)}
           />
           <Button
-            title="Delete"
+            title={t("delete")}
             type="primary"
             onPress={() => handleDelete(item.id)}
           />
@@ -102,13 +113,13 @@ const AllVehicles = () => {
   return (
     <View style={styles.container}>
       <Header
-        title="All Vehicles"
+        title={t("all_vehicles")}
         showBack={true}
         rightIcon="add"
         onRightPress={() => router.push("/(tabs)/addvehicle")}
       />
       {loading ? (
-        <Text style={styles.loading}>Loading vehicles...</Text>
+        <Text style={styles.loading}>{t("loading_vehicles")}</Text>
       ) : (
         <FlatList
           data={vehicles}
@@ -116,7 +127,7 @@ const AllVehicles = () => {
           renderItem={renderItem}
           contentContainerStyle={{ padding: 20, paddingBottom: 40 }}
           ListEmptyComponent={
-            <Text style={styles.empty}>No vehicles found.</Text>
+            <Text style={styles.empty}>{t("no_vehicles_found")}</Text>
           }
         />
       )}

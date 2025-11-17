@@ -39,9 +39,9 @@ const SplashScreen = () => {
       <Animated.View style={{ opacity: fadeAnim, alignItems: "center" }}>
         <View style={styles.logoContainer}>
           <Image
-            source={require("@/assets/images/welcome.jpeg")} // replace with your illustration image
+            source={require("@/assets/images/welcome.png")} // replace with your illustration image
             style={styles.logo}
-            resizeMode="stretch"
+            resizeMode="contain"
           />
         </View>
         <View style={styles.textContainer}>
@@ -72,12 +72,15 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: "white",
+    // backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 40,
   },
   logo: {
+     width: "100%",     // take full width of container
+  height: "100%",    // take full height of container
+  // borderRadius: 60,  // optional
     // width: 200,
     // height: 300,
     // fontSize: 48,

@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import Header from "@/components/Header";
 import InputField from "@/components/InputField";
-import { auth, db } from "@/src/firebaseConfig"; // ✅ import Firestore config
+import { auth, db } from "@/src/firebaseConfig";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
@@ -9,6 +9,7 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { addServiceRequest } from "@/backend/requestService";
 import React, { useEffect, useState } from "react";
 import * as Location from "expo-location";
+import { useTranslation } from "react-i18next";
 
 import {
   Alert,
@@ -23,11 +24,12 @@ import {
 } from "react-native";
 
 const CreateServiceRequestScreen = () => {
+  const { t } = useTranslation(); // ✅ translation hook
+
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [selectedVehicle, setSelectedVehicle] = useState("");
   const [serviceType, setServiceType] = useState("");
   const [issueDesc, setIssueDesc] = useState("");
-  // const [preferredDate, setPreferredDate] = useState("");
   const [pickupAddress, setPickupAddress] = useState("");
   const [dropoffAddress, setDropoffAddress] = useState("");
   const [imageUri, setImageUri] = useState<string | null>(null);
@@ -36,14 +38,16 @@ const CreateServiceRequestScreen = () => {
     longitude: number;
   } | null>(null);
 
-  // ✅ Fetch saved vehicles from Firestore
+  // Fetch saved vehicles
   useEffect(() => {
     const currentUser = auth.currentUser;
     if (!currentUser) return;
+
     const vehiclesQuery = query(
       collection(db, "vehicles"),
       where("ownerId", "==", currentUser.uid)
     );
+
     const unsub = onSnapshot(vehiclesQuery, (snapshot) => {
       const list = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -64,10 +68,11 @@ const CreateServiceRequestScreen = () => {
       setImageUri(result.assets[0].uri);
     }
   };
+
   const getCurrentLocation = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
-      Alert.alert("Permission Denied", "Allow location access.");
+      Alert.alert(t("permission_denied"), t("allow_location_access"));
       return;
     }
 
@@ -87,7 +92,7 @@ const CreateServiceRequestScreen = () => {
       postalCode: place.postalCode || "",
     });
 
-    Alert.alert("Location Captured", "Your current location has been added!");
+    Alert.alert(t("location_captured"), t("location_added"));
   };
 
   const handleSubmit = async () => {
@@ -95,11 +100,10 @@ const CreateServiceRequestScreen = () => {
       selectedVehicle == "" ||
       serviceType == "" ||
       issueDesc == "" ||
-      // preferredDate == "" ||
       pickupAddress == "" ||
       dropoffAddress == ""
     ) {
-      Alert.alert("Error", "Please fill all required fields.");
+      Alert.alert(t("error"), t("fill_all_fields"));
       return;
     }
 
@@ -107,18 +111,18 @@ const CreateServiceRequestScreen = () => {
       vehicleId: selectedVehicle,
       serviceType,
       issueDesc,
-      // preferredDate,
       pickupAddress,
       dropoffAddress,
       imageUri,
-      location: currentLocation, // 👈 add this
+      location: currentLocation,
     };
+
     try {
       await addServiceRequest(requestData);
-      alert("Service request submitted successfully!");
+      alert(t("request_submitted"));
       router.back();
     } catch (err) {
-      alert("Error submitting request!");
+      alert(t("request_error"));
       console.error(err);
     }
   };
@@ -126,7 +130,7 @@ const CreateServiceRequestScreen = () => {
   return (
     <View style={styles.container}>
       <Header
-        title="Service Request"
+        title={t("service_request")}
         showBack
         onRightPress={() => router.back()}
       />
@@ -135,7 +139,7 @@ const CreateServiceRequestScreen = () => {
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.sectionLabel}>Select Vehicle</Text>
+        <Text style={styles.sectionLabel}>{t("select_vehicle")}</Text>
 
         <View style={styles.pickerWrapper}>
           <Picker
@@ -143,7 +147,7 @@ const CreateServiceRequestScreen = () => {
             onValueChange={(val) => setSelectedVehicle(val)}
             style={styles.picker}
           >
-            <Picker.Item label="Select your saved vehicle" value="" />
+            <Picker.Item label={t("select_saved_vehicle")} value="" />
             {vehicles.map((v) => (
               <Picker.Item
                 key={v.id}
@@ -154,7 +158,7 @@ const CreateServiceRequestScreen = () => {
           </Picker>
         </View>
 
-        <Text style={styles.sectionLabel}>Service Details</Text>
+        <Text style={styles.sectionLabel}>{t("service_details")}</Text>
 
         <View style={styles.pickerWrapper}>
           <Picker
@@ -162,70 +166,70 @@ const CreateServiceRequestScreen = () => {
             onValueChange={(val) => setServiceType(val)}
             style={styles.picker}
           >
-            <Picker.Item label="Select service type" value="" />
-            <Picker.Item label="Oil Change" value="oil_change" />
-            <Picker.Item label="Brake Repair" value="brake_repair" />
-            <Picker.Item label="Battery Check" value="battery_check" />
-            <Picker.Item label="Tire Service" value="tire_service" />
-            <Picker.Item label="Other" value="other" />
+            <Picker.Item label={t("select_service_type")} value="" />
+            <Picker.Item label={t("oil_change")} value="oil_change" />
+            <Picker.Item label={t("brake_repair")} value="brake_repair" />
+            <Picker.Item label={t("battery_check")} value="battery_check" />
+            <Picker.Item label={t("tire_service")} value="tire_service" />
+            <Picker.Item label={t("other")} value="other" />
           </Picker>
         </View>
 
         <InputField
-          label="Issue Description"
-          placeholder="Describe the issue"
+          label={t("issue_description")}
+          placeholder={t("describe_issue")}
           value={issueDesc}
           onChangeText={setIssueDesc}
           style={styles.textArea}
         />
 
-        {/* <InputField
-          label="Preferred Date & Time"
-          placeholder="Select date & time"
-          value={preferredDate}
-          onChangeText={setPreferredDate}
-        /> */}
-        <Text style={styles.sectionLabel}>Location & Pickup Details</Text>
+        <Text style={styles.sectionLabel}>{t("location_pickup")}</Text>
+
         <InputField
-          label="Pickup Address"
-          placeholder="Enter full address for pickup"
+          label={t("pickup_address")}
+          placeholder={t("enter_pickup_address")}
           value={pickupAddress}
           onChangeText={setPickupAddress}
           style={styles.textArea}
         />
 
         <InputField
-          label="Dropoff Address"
-          placeholder="Enter full address for dropoff"
+          label={t("dropoff_address")}
+          placeholder={t("enter_dropoff_address")}
           value={dropoffAddress}
           onChangeText={setDropoffAddress}
           style={styles.textArea}
         />
 
         <View style={styles.imageUploadContainer}>
-          <Text style={styles.label}>Upload Photo (optional)</Text>
+          <Text style={styles.label}>{t("upload_photo_optional")}</Text>
           <Pressable style={styles.imagePicker} onPress={pickImage}>
             {imageUri ? (
               <Image source={{ uri: imageUri }} style={styles.imagePreview} />
             ) : (
-              <Text style={styles.imagePickerText}>+ Add Photo</Text>
+              <Text style={styles.imagePickerText}>{t("add_photo")}</Text>
             )}
           </Pressable>
         </View>
+
         <View style={{ marginBottom: 20 }}>
-          <Text style={styles.sectionLabel}>Current Location</Text>
+          <Text style={styles.sectionLabel}>{t("current_location")}</Text>
           <Pressable style={styles.locationButton} onPress={getCurrentLocation}>
             <Text style={{ color: "#fff" }}>
               {currentLocation
-                ? `Location set (${currentLocation.latitude.toFixed(
+                ? `${t("location_set")} (${currentLocation.latitude.toFixed(
                     4
                   )}, ${currentLocation.longitude.toFixed(4)})`
-                : "Use Current Location"}
+                : t("use_current_location")}
             </Text>
           </Pressable>
         </View>
 
-        <Button title="Submit Request" type="primary" onPress={handleSubmit} />
+        <Button
+          title={t("submit_request")}
+          type="primary"
+          onPress={handleSubmit}
+        />
       </ScrollView>
     </View>
   );
