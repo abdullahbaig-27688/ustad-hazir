@@ -21,7 +21,11 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import Button from "@/components/Button";
 import ProfileHeader from "@/components/Header";
+import { useTranslation } from "react-i18next";
+
 const ProfileScreen = () => {
+  const { t } = useTranslation(); // <-- TRANSLATION HOOK
+
   const [user, setUser] = useState<any>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -35,11 +39,11 @@ const ProfileScreen = () => {
         const data = docSnap.exists() ? docSnap.data() : {};
         setUser({
           uid: currentUser.uid,
-          name: currentUser.displayName || data?.name || "User",
+          name: currentUser.displayName || data?.name || t("name"),
           email: currentUser.email,
           photoURL: currentUser.photoURL || data?.photoURL || null,
         });
-        setName(currentUser.displayName || data?.name || "User");
+        setName(currentUser.displayName || data?.name || "");
         setEmail(currentUser.email || "");
       });
     }
@@ -58,7 +62,7 @@ const ProfileScreen = () => {
       }
     } catch (error) {
       console.error(error);
-      Alert.alert("Error", "Failed to pick or upload image.");
+      Alert.alert(t("error"), t("error_pick_image"));
     }
   };
 
@@ -81,10 +85,10 @@ const ProfileScreen = () => {
       await updateDoc(userDocRef, { photoURL: downloadURL });
 
       setUser({ ...user, photoURL: downloadURL });
-      Alert.alert("Success", "Profile picture updated!");
+      Alert.alert(t("success"), t("success_photo"));
     } catch (error) {
       console.error(error);
-      Alert.alert("Error", "Failed to upload image.");
+      Alert.alert(t("error"), t("error_upload_image"));
     } finally {
       setUploading(false);
     }
@@ -105,13 +109,13 @@ const ProfileScreen = () => {
       }
 
       setUser({ ...user, name, email });
-      Alert.alert("Success", "Profile updated!");
+      Alert.alert(t("success"), t("success_profile"));
     } catch (error: any) {
       console.error(error);
       if (error.code === "auth/requires-recent-login") {
-        Alert.alert("Error", "Please logout and login again to update email.");
+        Alert.alert(t("error"), t("error_requires_login"));
       } else {
-        Alert.alert("Error", "Failed to update profile.");
+        Alert.alert(t("error"), t("error_update_profile"));
       }
     }
   };
@@ -122,14 +126,14 @@ const ProfileScreen = () => {
       router.replace("/login");
     } catch (error) {
       console.error(error);
-      Alert.alert("Error", "Failed to logout.");
+      Alert.alert(t("error"), t("logout_failed"));
     }
   };
 
   if (!user)
     return (
       <View style={styles.loadingContainer}>
-        <Text>Loading...</Text>
+        <Text>{t("loading")}</Text>
       </View>
     );
 
@@ -140,7 +144,7 @@ const ProfileScreen = () => {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView contentContainerStyle={styles.container}>
-          <ProfileHeader title="Profile" />
+          <ProfileHeader title={t("profile")} />
 
           <View style={styles.profileHeader}>
             <Pressable onPress={pickImage} style={styles.avatarWrapper}>
@@ -154,28 +158,30 @@ const ProfileScreen = () => {
                 />
               )}
               <Text style={styles.changePhotoText}>
-                {uploading ? "Uploading..." : "Change Photo"}
+                {uploading ? t("uploading") : t("change_photo")}
               </Text>
             </Pressable>
+
             <Text style={styles.userName}>{name}</Text>
             <Text style={styles.userEmail}>{email}</Text>
           </View>
 
+          {/* Input Section */}
           <View style={styles.inputSection}>
-            <Text style={styles.inputLabel}>Name</Text>
+            <Text style={styles.inputLabel}>{t("name")}</Text>
             <TextInput
               style={styles.input}
               value={name}
               onChangeText={setName}
-              placeholder="Enter your name"
+              placeholder={t("enter_name")}
             />
 
-            <Text style={styles.inputLabel}>Email</Text>
+            <Text style={styles.inputLabel}>{t("email")}</Text>
             <TextInput
               style={styles.input}
               value={email}
               onChangeText={setEmail}
-              placeholder="Enter your email"
+              placeholder={t("enter_email")}
               keyboardType="email-address"
               autoCapitalize="none"
             />
@@ -183,11 +189,15 @@ const ProfileScreen = () => {
 
           <View style={styles.buttonSection}>
             <Button
-              title="Save Changes"
+              title={t("save_changes")}
               type="primary"
               onPress={handleSaveChanges}
             />
-            <Button title="Logout" type="secondary" onPress={handleLogout} />
+            <Button
+              title={t("logout")}
+              type="secondary"
+              onPress={handleLogout}
+            />
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
@@ -199,7 +209,6 @@ export default ProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
-    // padding: 20,
     alignItems: "center",
     backgroundColor: "#F9FAFB",
     flexGrow: 1,
@@ -212,7 +221,6 @@ const styles = StyleSheet.create({
   profileHeader: {
     alignItems: "center",
     marginBottom: 30,
-    
   },
   avatarWrapper: {
     alignItems: "center",
@@ -240,9 +248,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   inputSection: {
-    // width: "100%",
     marginBottom: 30,
-
   },
   inputLabel: {
     fontSize: 14,
@@ -262,6 +268,5 @@ const styles = StyleSheet.create({
   },
   buttonSection: {
     width: "80%",
-    // alignItems: "center",
   },
 });

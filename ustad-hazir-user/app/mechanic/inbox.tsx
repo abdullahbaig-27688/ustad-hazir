@@ -53,7 +53,11 @@ const InboxScreen = () => {
 
   return (
     <View style={styles.container}>
-      <ChatHeader title="Inbox" showBack onBackPress={() => router.push("/mechanic/chats")} />
+      <ChatHeader
+        title="Inbox"
+        showBack
+        onBackPress={() => router.push("/mechanic/chats")}
+      />
       <View style={styles.content}>
         <FlatList
           data={messages}

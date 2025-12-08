@@ -161,5 +161,65 @@
   "status": "Statut",
   "pending": "En attente",
   "created": "Créé",
-  "na": "N/A"
+  "na": "N/A",
+
+  "addService": "Ajouter un service",
+  "service": "Service",
+  "selectServiceType": "Sélectionner le type de service",
+  "oilChange": "Vidange d'huile",
+  "engineRepair": "Réparation du moteur",
+  "tyreRepair": "Réparation des pneus",
+  "batteryCheck": "Contrôle de la batterie",
+  "acService": "Service de climatisation",
+  "carWash": "Lavage de voiture",
+  "carInspection": "Inspection du véhicule",
+  "bodyPaint": "Peinture de carrosserie",
+  "wheelAlignment": "Alignement des roues",
+
+  "descriptionLabel": "Entrer la description",
+  "descriptionPlaceholder": "Fournir la description du service",
+
+  "priceLabel": "Prix (PKR)",
+  "pricePlaceholder": "Entrer le prix",
+
+  "durationLabel": "Temps estimé",
+  "durationPlaceholder": "ex. 1 heure",
+
+  "category": "Catégorie",
+  "selectVehicleType": "Sélectionner le type de véhicule",
+  "car": "Voiture",
+  "bike": "Moto",
+  "truck": "Camion",
+  "van": "Van",
+  "suv": "SUV",
+
+  "getLocation": "Obtenir l’emplacement actuel",
+  "fetching": "Récupération...",
+  "currentLocation": "Emplacement actuel",
+
+  "serviceAdded": "Service ajouté avec succès !",
+  "missingFields": "Champs manquants",
+  "missingFieldsMsg": "Veuillez remplir tous les champs requis.",
+
+  "service_history": "Historique des services",
+  "no_services": "Aucun service ajouté.",
+
+  "delete_service": "Supprimer le service",
+  "delete_confirm": "Êtes-vous sûr de vouloir supprimer ce service ?",
+
+  "price": "Prix",
+
+  "description": "Description",
+  "no_description": "Aucune description fournie.",
+  "location": "Localisation",
+  "city": "Ville",
+  "state": "État",
+  "country": "Pays",
+
+  "error_pick_image": "Échec de sélection ou de téléchargement de l'image.",
+  "error_upload_image": "Échec du téléchargement de l'image.",
+  "success_photo": "Photo de profil mise à jour !",
+  "success_profile": "Profil mis à jour !",
+  "error_update_profile": "Impossible de mettre à jour le profil.",
+  "error_requires_login": "Veuillez vous reconnecter pour mettre à jour l'email."
 }

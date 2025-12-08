@@ -14,9 +14,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import AllServiceHeader from "@/components/Header";
 import { router, useFocusEffect } from "expo-router";
-import { getAllServices, deleteService } from "@/backend/machenicService"; // <-- DELETE added
+import { getAllServices, deleteService } from "@/backend/machenicService";
+
+// 🟦 TRANSLATION
+import { useTranslation } from "react-i18next";
 
 const AllServices = () => {
+  const { t } = useTranslation();
+
   const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -42,35 +47,32 @@ const AllServices = () => {
     await fetchServices();
     setRefreshing(false);
   };
+
   useFocusEffect(
     useCallback(() => {
-      fetchServices(); // Runs every time user comes back to this screen
+      fetchServices();
     }, [])
   );
 
-  // 🔥 DELETE CONFIRMATION
+  // DELETE CONFIRMATION
   const handleDelete = (id: string) => {
-    Alert.alert(
-      "Delete Service",
-      "Are you sure you want to delete this service?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete",
-          style: "destructive",
-          onPress: async () => {
-            await deleteService(id);
-            fetchServices();
-          },
+    Alert.alert(t("delete_service"), t("delete_confirm"), [
+      { text: t("cancel"), style: "cancel" },
+      {
+        text: t("delete"),
+        style: "destructive",
+        onPress: async () => {
+          await deleteService(id);
+          fetchServices();
         },
-      ]
-    );
+      },
+    ]);
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <AllServiceHeader
-        title="Service History"
+        title={t("service_history")}
         showBack
         rightIcon="add"
         onRightPress={() => router.push("/mechanic/addService")}
@@ -88,7 +90,7 @@ const AllServices = () => {
           }
         >
           {services.length === 0 ? (
-            <Text style={styles.noServices}>No services added yet.</Text>
+            <Text style={styles.noServices}>{t("no_services")}</Text>
           ) : (
             services.map((s) => (
               <View key={s.id} style={styles.serviceCard}>
@@ -102,16 +104,20 @@ const AllServices = () => {
 
                 <View style={styles.serviceInfo}>
                   <Text style={styles.serviceName}>{s.serviceName}</Text>
-                  <Text style={styles.servicePrice}>PKR {s.price}</Text>
-                  <Text style={styles.serviceCategory}>{s.category}</Text>
+                  <Text style={styles.servicePrice}>
+                    {t("price")}: PKR {s.price}
+                  </Text>
+                  <Text style={styles.serviceCategory}>
+                    {t("category")}: {s.category}
+                  </Text>
 
                   {s.description ? (
                     <Text style={styles.serviceDescription}>
-                      {s.description}
+                      {t("description")}: {s.description}
                     </Text>
                   ) : (
                     <Text style={styles.serviceDescriptionEmpty}>
-                      No description provided.
+                      {t("no_description")}
                     </Text>
                   )}
 
@@ -119,25 +125,25 @@ const AllServices = () => {
                   {s.location && (
                     <View style={{ marginTop: 6 }}>
                       <Text style={styles.locationText}>
-                        📍 {s.location.city || "Unknown City"},{" "}
-                        {s.location.state || ""}
+                        📍 {s.location.city || t("city")} ,{" "}
+                        {s.location.state || t("state")}
                       </Text>
                       <Text style={styles.locationSubText}>
-                        {s.location.country || ""}
+                        {s.location.country || t("country")}
                       </Text>
                     </View>
                   )}
 
                   {/* ACTION BUTTONS */}
                   <View style={styles.actionRow}>
-                    {/* EDIT */}
                     <Button
-                      title="Edit"
+                      title={t("edit")}
                       type="primary"
                       onPress={() => router.push(`/editservice/${s.id}`)}
                     />
+
                     <Button
-                      title="Delete"
+                      title={t("delete")}
                       type="secondary"
                       onPress={() => handleDelete(s.id)}
                     />
@@ -206,30 +212,9 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
 
-  // ACTION BUTTONS
   actionRow: {
     flexDirection: "row",
     marginTop: 10,
     justifyContent: "space-between",
   },
-
-  editBtn: {
-    flexDirection: "row",
-    backgroundColor: "#2196F3",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 6,
-    alignItems: "center",
-  },
-  editText: { color: "#fff", marginLeft: 4, fontSize: 13 },
-
-  deleteBtn: {
-    flexDirection: "row",
-    backgroundColor: "#E53935",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 6,
-    alignItems: "center",
-  },
-  deleteText: { color: "#fff", marginLeft: 4, fontSize: 13 },
 });

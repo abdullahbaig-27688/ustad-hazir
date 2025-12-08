@@ -730,10 +730,17 @@ const styles = StyleSheet.create({
     width: 200,
   },
   addVehicleText: {
-    color: "#0D47A1",
-    fontWeight: "600",
-    marginTop: 10,
-    fontSize: 16,
+    // color: "#0D47A1",
+
+    // fontWeight: "600",
+    // marginTop: 10,
+    // fontSize: 16,
+    fontSize: 14,
+    backgroundColor: "#0D47A1",
+    color: "#fff",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
   },
   serviceCardItem: {
     // backgroundColor: "#ffffff",

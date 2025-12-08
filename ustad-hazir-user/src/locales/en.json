@@ -69,7 +69,7 @@
   "vehicle_added_success": "Vehicle added successfully!",
   "vehicle_add_failed": "Failed to save vehicle. Please try again.",
   "fill_field_error": "Please fill in the {{field}} field.",
-   "vehicle_update_success": "Vehicle updated successfully!",
+  "vehicle_update_success": "Vehicle updated successfully!",
   "vehicle_update_failed": "❌ Failed to update vehicle",
   "vehicle_not_found": "Vehicle not found",
 
@@ -98,7 +98,6 @@
 
   "upload_photo_optional": "Upload Photo (optional)",
 
-
   "current_location": "Current Location",
   "use_current_location": "Use Current Location",
   "location_set": "Location Set",
@@ -114,7 +113,7 @@
 
   "error": "Error",
   "fill_all_fields": "Please fill all required fields.",
-  
+
   "profile": "Profile",
   "change_photo": "Change Photo",
   "uploading": "Uploading...",
@@ -132,7 +131,7 @@
   "reauthenticate": "Please logout and login again to update email.",
   "image_upload_failed": "Failed to pick or upload image.",
   "logout_failed": "Failed to logout.",
-  
+
   "all_vehicles": "All Vehicles",
   "loading_vehicles": "Loading vehicles...",
   "no_vehicles_found": "No vehicles found.",
@@ -146,10 +145,10 @@
   "delete": "Delete",
   "confirm_delete_title": "Confirm Delete",
   "confirm_delete_message": "Are you sure you want to delete this vehicle?",
- 
+
   "vehicle_deleted": "Vehicle deleted!",
   "delete_failed": "Failed to delete vehicle",
-  
+
   "service_request_history": "Service Request History",
   "loading_service_history": "Loading service history...",
   "no_requests_found": "No requests found.",
@@ -162,11 +161,65 @@
   "status": "Status",
   "pending": "Pending",
   "created": "Created",
-  "na": "N/A"
+  "na": "N/A",
+
+  "addService": "Add Service",
+  "service": "Service",
+  "selectServiceType": "Select Service Type",
+  "oilChange": "Oil Change",
+  "engineRepair": "Engine Repair",
+  "tyreRepair": "Tyre Repair",
+  "batteryCheck": "Battery Check",
+  "acService": "AC Service",
+  "carWash": "Car Wash",
+  "carInspection": "Car Inspection",
+  "bodyPaint": "Body Paint",
+  "wheelAlignment": "Wheel Alignment",
+
+  "descriptionLabel": "Enter Description",
+  "descriptionPlaceholder": "Provide Service Description",
+
+  "priceLabel": "Price (PKR)",
+  "pricePlaceholder": "Enter Price",
+
+  "durationLabel": "Estimated Time",
+  "durationPlaceholder": "e.g. 1 hour",
+
+  "category": "Category",
+  "selectVehicleType": "Select Vehicle Type",
+  "car": "Car",
+  "bike": "Bike",
+  "truck": "Truck",
+  "van": "Van",
+  "suv": "SUV",
+
+  "getLocation": "Get Current Location",
+  "fetching": "Fetching...",
+  "currentLocation": "Current Location",
+
+  "serviceAdded": "Service added successfully!",
+  "missingFields": "Missing Fields",
+  "missingFieldsMsg": "Please fill all required fields.",
+
+  "service_history": "Service History",
+  "no_services": "No services added yet.",
+
+  "delete_service": "Delete Service",
+  "delete_confirm": "Are you sure you want to delete this service?",
+
+  "price": "Price",
+
+  "description": "Description",
+  "no_description": "No description provided.",
+  "location": "Location",
+  "city": "City",
+  "state": "State",
+  "country": "Country",
+
+  "error_pick_image": "Failed to pick or upload image.",
+  "error_upload_image": "Failed to upload image.",
+  "success_photo": "Profile picture updated!",
+  "success_profile": "Profile updated!",
+  "error_update_profile": "Failed to update profile.",
+  "error_requires_login": "Please logout and login again to update email."
 }
-
-
-
-
-
-

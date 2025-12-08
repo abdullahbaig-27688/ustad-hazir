@@ -150,7 +150,7 @@
 
   "vehicle_deleted": "گاڑی حذف کر دی گئی!",
   "delete_failed": "گاڑی حذف نہیں ہو سکی",
-  
+
   "service_request_history": "سروس کی درخواست کی تاریخ",
   "loading_service_history": "سروس کی درخواستیں لوڈ ہو رہی ہیں...",
   "no_requests_found": "کوئی درخواستیں نہیں ملی",
@@ -163,6 +163,65 @@
   "status": "حیثیت",
   "pending": "زیر التواء",
   "created": "تخلیق کی تاریخ",
-  "na": "N/A"
+  "na": "N/A",
 
+  "addService": "سروس شامل کریں",
+  "service": "سروس",
+  "selectServiceType": "سروس کی قسم منتخب کریں",
+  "oilChange": "آئل چینج",
+  "engineRepair": "انجن کی مرمت",
+  "tyreRepair": "ٹائر کی مرمت",
+  "batteryCheck": "بیٹری چیک",
+  "acService": "اے سی سروس",
+  "carWash": "کار واش",
+  "carInspection": "کار معائنہ",
+  "bodyPaint": "باڈی پینٹ",
+  "wheelAlignment": "وہیل الائنمنٹ",
+
+  "descriptionLabel": "تفصیل درج کریں",
+  "descriptionPlaceholder": "سروس کی تفصیل لکھیں",
+
+  "priceLabel": "قیمت (PKR)",
+  "pricePlaceholder": "قیمت درج کریں",
+
+  "durationLabel": "متوقع وقت",
+  "durationPlaceholder": "مثلاً 1 گھنٹہ",
+
+  "category": "کیٹیگری",
+  "selectVehicleType": "گاڑی کی قسم منتخب کریں",
+  "car": "کار",
+  "bike": "موٹر سائیکل",
+  "truck": "ٹرک",
+  "van": "وین",
+  "suv": "ایس یو وی",
+
+  "getLocation": "موجودہ مقام حاصل کریں",
+  "fetching": "حاصل کیا جا رہا ہے...",
+  "currentLocation": "موجودہ مقام",
+
+  "serviceAdded": "سروس کامیابی سے شامل ہو گئی!",
+  "missingFields": "درکار معلومات نہیں",
+  "missingFieldsMsg": "براہ کرم تمام مطلوبہ فیلڈز پُر کریں۔",
+
+  "service_history": "سروس کی تاریخ",
+  "no_services": "کوئی سروس شامل نہیں کی گئی۔",
+
+  "delete_service": "سروس حذف کریں",
+  "delete_confirm": "کیا آپ واقعی اس سروس کو حذف کرنا چاہتے ہیں؟",
+
+  "price": "قیمت",
+
+  "description": "تفصیل",
+  "no_description": "کوئی تفصیل فراہم نہیں کی گئی۔",
+  "location": "مقام",
+  "city": "شہر",
+  "state": "ریاست",
+  "country": "ملک",
+
+  "error_pick_image": "تصویر منتخب یا اپ لوڈ نہیں ہو سکی۔",
+  "error_upload_image": "تصویر اپ لوڈ کرنے میں ناکامی۔",
+  "success_photo": "پروفائل تصویر اپ ڈیٹ ہو گئی!",
+  "success_profile": "پروفائل اپ ڈیٹ ہو گئی!",
+  "error_update_profile": "پروفائل اپ ڈیٹ نہیں ہو سکی۔",
+  "error_requires_login": "ای میل اپ ڈیٹ کرنے کے لیے دوبارہ لاگ ان کریں۔"
 }

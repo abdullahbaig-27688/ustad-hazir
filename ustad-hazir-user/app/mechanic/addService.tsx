@@ -8,6 +8,7 @@ import {
   Text,
   Platform,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 import AddServiceHeader from "@/components/Header";
 import InputField from "@/components/InputField";
 import AddServiceButton from "@/components/Button";
@@ -18,6 +19,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Picker } from "@react-native-picker/picker";
 
 const ServicePricing = () => {
+  const { t } = useTranslation();
+
   const [serviceName, setServiceName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -26,13 +29,13 @@ const ServicePricing = () => {
   const [location, setLocation] = useState<any>(null);
   const [locationLoading, setLocationLoading] = useState(false);
 
-  // ✅ Get location with address
+  // 🔵 GET LOCATION
   const getCurrentLocation = async () => {
     setLocationLoading(true);
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        Alert.alert("Permission denied", "Allow location access to continue.");
+        Alert.alert(t("permissionDenied"), t("allowLocation"));
         setLocationLoading(false);
         return;
       }
@@ -55,15 +58,15 @@ const ServicePricing = () => {
       });
     } catch (err) {
       console.error(err);
-      Alert.alert("Error", "Failed to get location.");
+      Alert.alert(t("error"), t("locationFailed"));
     }
     setLocationLoading(false);
   };
 
-  // ✅ Handle Add Service
+  // 🔵 SUBMIT FORM
   const handleAddService = async () => {
     if (!serviceName || !price || !category) {
-      Alert.alert("Missing Fields", "Please fill all required fields.");
+      Alert.alert(t("missingFields"), t("missingFieldsMsg"));
       return;
     }
 
@@ -80,43 +83,43 @@ const ServicePricing = () => {
 
     try {
       await addService(newService);
-      Alert.alert("✅ Success", "Service added successfully!");
+      Alert.alert(t("success"), t("serviceAdded"));
       router.back();
     } catch (error: any) {
       console.error("🔥 Add Service Error:", error);
-      Alert.alert("Error", error.message || "Failed to add service");
+      Alert.alert(t("error"), error.message || t("serviceAddFailed"));
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <AddServiceHeader title="Add Service" showBack />
+      <AddServiceHeader title={t("addService")} showBack />
       <ScrollView contentContainerStyle={styles.content}>
-        {/* Service Type Picker */}
-        <Text style={styles.sectionLabel}>Service</Text>
+        {/* Service Type */}
+        <Text style={styles.sectionLabel}>{t("service")}</Text>
         <View style={styles.pickerWrapper}>
           <Picker
             selectedValue={serviceName}
             onValueChange={(val) => setServiceName(val)}
             style={styles.picker}
           >
-            <Picker.Item label="Select Service Type" value="" />
-            <Picker.Item label="Oil Change" value="oil_change" />
-            <Picker.Item label="Engine Repair" value="engine_repair" />
-            <Picker.Item label="Tyre Repair" value="tyre_repair" />
-            <Picker.Item label="Battery Check" value="battery_check" />
-            <Picker.Item label="AC Service" value="ac_service" />
-            <Picker.Item label="Car Wash" value="car_wash" />
-            <Picker.Item label="Car Inspection" value="car_inspection" />
-            <Picker.Item label="Body Paint" value="body_paint" />
-            <Picker.Item label="Wheel Alignment" value="wheel_alignment" />
+            <Picker.Item label={t("selectServiceType")} value="" />
+            <Picker.Item label={t("oilChange")} value="oil_change" />
+            <Picker.Item label={t("engineRepair")} value="engine_repair" />
+            <Picker.Item label={t("tyreRepair")} value="tyre_repair" />
+            <Picker.Item label={t("batteryCheck")} value="battery_check" />
+            <Picker.Item label={t("acService")} value="ac_service" />
+            <Picker.Item label={t("carWash")} value="car_wash" />
+            <Picker.Item label={t("carInspection")} value="car_inspection" />
+            <Picker.Item label={t("bodyPaint")} value="body_paint" />
+            <Picker.Item label={t("wheelAlignment")} value="wheel_alignment" />
           </Picker>
         </View>
 
         {/* Description */}
         <InputField
-          label="Enter Description"
-          placeholder="Provide Service Description"
+          label={t("descriptionLabel")}
+          placeholder={t("descriptionPlaceholder")}
           multiline
           numberOfLines={5}
           value={description}
@@ -126,42 +129,42 @@ const ServicePricing = () => {
 
         {/* Price */}
         <InputField
-          label="Price (PKR)"
-          placeholder="Enter Price"
+          label={t("priceLabel")}
+          placeholder={t("pricePlaceholder")}
           keyboardType="numeric"
           value={price}
           onChangeText={setPrice}
         />
 
-        {/* Estimated Time */}
+        {/* Duration */}
         <InputField
-          label="Estimated Time"
-          placeholder="e.g. 1 hour"
+          label={t("durationLabel")}
+          placeholder={t("durationPlaceholder")}
           value={duration}
           onChangeText={setDuration}
         />
 
-        {/* Category Picker */}
-        <Text style={styles.sectionLabel}>Category</Text>
+        {/* Category */}
+        <Text style={styles.sectionLabel}>{t("category")}</Text>
         <View style={styles.pickerWrapper}>
           <Picker
             selectedValue={category}
             onValueChange={(val) => setCategory(val)}
             style={styles.picker}
           >
-            <Picker.Item label="Select Vehicle Type" value="" />
-            <Picker.Item label="Car" value="car" />
-            <Picker.Item label="Bike" value="bike" />
-            <Picker.Item label="Truck" value="truck" />
-            <Picker.Item label="Van" value="van" />
-            <Picker.Item label="SUV" value="suv" />
+            <Picker.Item label={t("selectVehicleType")} value="" />
+            <Picker.Item label={t("car")} value="car" />
+            <Picker.Item label={t("bike")} value="bike" />
+            <Picker.Item label={t("truck")} value="truck" />
+            <Picker.Item label={t("van")} value="van" />
+            <Picker.Item label={t("suv")} value="suv" />
           </Picker>
         </View>
 
         {/* Location */}
         <View style={{ marginVertical: 10 }}>
           <Text style={{ fontWeight: "bold", marginBottom: 6 }}>
-            Current Location
+            {t("currentLocation")}
           </Text>
           <Pressable style={styles.locationButton} onPress={getCurrentLocation}>
             <Text>
@@ -170,15 +173,14 @@ const ServicePricing = () => {
                     location.city || ""
                   }`
                 : locationLoading
-                ? "Fetching..."
-                : "Get Current Location"}
+                ? t("fetching")
+                : t("getLocation")}
             </Text>
           </Pressable>
         </View>
 
-        {/* Add Service Button */}
         <AddServiceButton
-          title="Add Service"
+          title={t("addService")}
           type="primary"
           onPress={handleAddService}
         />

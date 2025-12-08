@@ -128,6 +128,41 @@ const updateServiceRequest = async (id: string, updatedData: any) => {
   console.log("✅ Service request updated:", id);
 };
 
+/** ➕ Quick service request (for mechanic services screen) */
+const addQuickServiceRequest = async (service: any) => {
+  try {
+    const currentUser = auth.currentUser;
+    if (!currentUser) throw new Error("User not logged in");
+
+    const userRef = doc(db, "users", currentUser.uid);
+    const userSnap = await getDoc(userRef);
+    const userData = userSnap.exists() ? userSnap.data() : {};
+
+    const customerName = userData.name || "Anonymous";
+
+    const docRef = doc(serviceRequestRef);
+
+    await setDoc(docRef, {
+      id: docRef.id,
+      ownerId: currentUser.uid,
+      mechanicId: service.mechanicId ?? null,
+      serviceId: service.id,
+      customerName,
+      serviceName: service.serviceName,
+      price: service.price || 0,
+      status: "pending",
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+
+    console.log("✅ Quick service request created:", docRef.id);
+    return docRef.id;
+  } catch (error) {
+    console.error("❌ Error creating quick service request:", error);
+    throw error;
+  }
+};
+
 /** ❌ Delete a service request */
 const deleteServiceRequest = async (id: string) => {
   const docRef = doc(db, "serviceRequests", id);
@@ -138,6 +173,7 @@ const deleteServiceRequest = async (id: string) => {
 export {
   addServiceRequest,
   fetchVehicleDetails,
+  addQuickServiceRequest,
   deleteServiceRequest,
   getSingleServiceRequest,
   getUserServiceRequests,

@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
   },
   buttonSection: {
     width: "80%",
-    alignItems: "center",
+    
   },
   // Language Modal Styles
   modalOverlay: {
