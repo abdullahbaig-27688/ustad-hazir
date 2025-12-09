@@ -100,16 +100,23 @@ const HomeScreen = () => {
     const unsubscribe = listenToCompletedJobs(mechanic.uid, setCompletedJobs);
     return () => unsubscribe();
   }, []);
-
   const handleAccept = async (request) => {
     const mechanic = auth.currentUser;
     if (!mechanic) return;
+
     try {
-      await updateRequestStatus(request.id, "accepted");
+      await updateRequestStatus(
+        request.id,
+        "accepted",
+        mechanic.uid,
+        mechanic.displayName || "Mechanic"
+      );
+
       const vehicle = await getSingleVehicle(request.vehicleId);
       const vehicleName = vehicle
         ? `${vehicle.brand} ${vehicle.model} (${vehicle.year}) - ${vehicle.color}`
         : "N/A";
+
       setActiveJob({ ...request, vehicleName });
 
       await createChatIfNotExists(
@@ -319,7 +326,7 @@ const HomeScreen = () => {
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Completed Jobs</Text>
             {completedJobs.length > 3 && (
-              <Pressable onPress={() => router.push("/mechanic/completedJobs")}>
+              <Pressable onPress={() => router.push("/completedjobHistory")}>
                 <Text style={styles.seeAllButton}>See All</Text>
               </Pressable>
             )}
@@ -464,8 +471,8 @@ const styles = StyleSheet.create({
   jobService: { fontSize: 16, fontWeight: "bold" },
   jobTime: { fontSize: 12, color: "#555", marginTop: 4 },
   actionButtons: { flexDirection: "column", marginLeft: 50 },
-  jobCompleted:{
-     flexDirection: "column",
+  jobCompleted: {
+    flexDirection: "column",
     // backgroundColor: "#fff",
     backgroundColor: "#f0f4ff",
     padding: 16,

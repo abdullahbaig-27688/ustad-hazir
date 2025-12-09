@@ -155,23 +155,49 @@ const listenToCustomerRequests = (callback: (data: any[]) => void) => {
   return unsubscribe;
 };
 
+export const fetchMechanicName = async (mechanicId: string) => {
+  try {
+    if (!mechanicId) return "Unknown Mechanic";
+
+    const mechRef = doc(db, "users", mechanicId);
+    const snap = await getDoc(mechRef);
+
+    if (!snap.exists()) return "Unknown Mechanic";
+
+    const data = snap.data();
+    return data.name || "Unknown Mechanic";
+  } catch (error) {
+    console.log("Error fetching mechanic:", error);
+    return "Unknown Mechanic";
+  }
+};
+
 // Listen to Completed Jobs (for mechanic dashboard)
 const listenToCompletedJobs = (
   mechanicId: string,
   callback: (jobs: any[]) => void
 ) => {
   const q = query(
-    collection(db, "serviceRequests"), // use correct collection
-    // where("machenicId", "==", mechanicId), // make sure field is correctly named
+    collection(db, "serviceRequests"),
+    // where("mechanicId", "==", mechanicId), // add if you want filter
     where("status", "==", "completed")
   );
 
-  const unsubscribe = onSnapshot(q, (snapshot) => {
+  const unsubscribe = onSnapshot(q, async (snapshot) => {
     const completedJobs = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
-    callback(completedJobs);
+
+    // 🔥 Fetch mechanic name for each job
+    const jobsWithNames = await Promise.all(
+      completedJobs.map(async (job) => {
+        const mechanicName = await fetchMechanicName(job.mechanicId);
+        return { ...job, mechanicName };
+      })
+    );
+
+    callback(jobsWithNames);
   });
 
   return unsubscribe;
@@ -180,12 +206,16 @@ const listenToCompletedJobs = (
 // ✅ Accept or Reject Customer Request
 const updateRequestStatus = async (
   requestId: string,
-  status: "accepted" | "rejected"
+  status: "accepted" | "rejected",
+  mechanicId?: string,
+  mechanicName?: string
 ) => {
   try {
     const requestDoc = doc(db, "serviceRequests", requestId);
     await updateDoc(requestDoc, {
       status,
+      ...(mechanicId && { mechanicId }),
+      ...(mechanicName && { mechanicName }),
       updatedAt: new Date().toISOString(),
     });
     console.log(`✅ Request ${status}:`, requestId);

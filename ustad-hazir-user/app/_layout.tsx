@@ -35,7 +35,12 @@ export default function RootLayout() {
             name="editservice/[id]"
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="completedjobHistory"
+            options={{ headerShown: false }}
+          />
         </Stack>
+
         <StatusBar style="auto" />
       </ThemeProvider>
     </MechanicProvider>
