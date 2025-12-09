@@ -155,6 +155,28 @@ const listenToCustomerRequests = (callback: (data: any[]) => void) => {
   return unsubscribe;
 };
 
+// Listen to Completed Jobs (for mechanic dashboard)
+const listenToCompletedJobs = (
+  mechanicId: string,
+  callback: (jobs: any[]) => void
+) => {
+  const q = query(
+    collection(db, "serviceRequests"), // use correct collection
+    // where("machenicId", "==", mechanicId), // make sure field is correctly named
+    where("status", "==", "completed")
+  );
+
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    const completedJobs = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    callback(completedJobs);
+  });
+
+  return unsubscribe;
+};
+
 // ✅ Accept or Reject Customer Request
 const updateRequestStatus = async (
   requestId: string,
@@ -201,7 +223,7 @@ const getServicesByName = async (serviceName: string) => {
 
         let mechanicName = "";
         let mechanicContact = "";
-         let workshopName = "";
+        let workshopName = "";
         if (mechanicId) {
           const mechanicDoc = await getDoc(doc(usersCollectionRef, mechanicId));
           if (mechanicDoc.exists()) {
@@ -215,7 +237,7 @@ const getServicesByName = async (serviceName: string) => {
         return {
           id: docSnap.id,
           name: mechanicName, // mechanic's name
-           contact: mechanicContact, // mechanic's contact
+          contact: mechanicContact, // mechanic's contact
           workshopName: workshopName,
           ...serviceData,
         };
@@ -234,6 +256,7 @@ export {
   getSingleService,
   listenToAllServices,
   listenToCustomerRequests,
+  listenToCompletedJobs,
   updateRequestStatus,
   updateService,
   deleteService,

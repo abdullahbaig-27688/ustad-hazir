@@ -12,6 +12,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  BackHandler,
 } from "react-native";
 import { auth, storage, db } from "@/src/firebaseConfig";
 import { router } from "expo-router";
@@ -167,6 +168,7 @@ const ProfileScreen = () => {
     try {
       await auth.signOut();
       router.replace("/login");
+      if (Platform.OS === "android") BackHandler.exitApp();
     } catch (error) {
       console.error(error);
       Alert.alert(t("error"), t("logout_failed"));
@@ -240,7 +242,7 @@ const ProfileScreen = () => {
               onPress={handleLogout}
             />
             <Button
-              title="Change Language"
+              title={t("changeLanguage")}
               type="tertiary"
               onPress={() => setLangModalVisible(true)}
               style={{ marginTop: 10 }}
@@ -323,7 +325,6 @@ const styles = StyleSheet.create({
   },
   buttonSection: {
     width: "80%",
-    
   },
   // Language Modal Styles
   modalOverlay: {

@@ -139,16 +139,18 @@ const addQuickServiceRequest = async (service: any) => {
     const userData = userSnap.exists() ? userSnap.data() : {};
 
     const customerName = userData.name || "Anonymous";
+    // Use the mechanic ID from the selected service
+    const mechanicId = service.machenicId; // ✅ assign mechanic automatically
 
     const docRef = doc(serviceRequestRef);
 
     await setDoc(docRef, {
       id: docRef.id,
       ownerId: currentUser.uid,
-      mechanicId: service.mechanicId ?? null,
+      mechanicId,
       serviceId: service.id,
       customerName,
-      serviceName: service.serviceName,
+      serviceType: service.serviceName || "",
       price: service.price || 0,
       status: "pending",
       createdAt: serverTimestamp(),

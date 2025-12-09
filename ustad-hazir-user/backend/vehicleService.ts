@@ -1,4 +1,4 @@
-import { db, storage,auth } from "@/src/firebaseConfig";
+import { db, storage, auth } from "@/src/firebaseConfig";
 import {
   collection,
   doc,
@@ -11,7 +11,6 @@ import {
   where,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
 
 const vehicleRef = collection(db, "vehicles");
 
@@ -63,7 +62,7 @@ const addVehicle = async (vehicle: any) => {
 const getUserVehicles = async () => {
   try {
     const currentUser = auth.currentUser;
-     if (!currentUser) throw new Error("User not logged in");
+    if (!currentUser) throw new Error("User not logged in");
 
     const q = query(vehicleRef, where("ownerId", "==", currentUser.uid));
     const snapshot = await getDocs(q);
@@ -76,18 +75,25 @@ const getUserVehicles = async () => {
 };
 
 /** 🔍 Get a single vehicle by ID */
-const getSingleVehicle = async (id: string) => {
+const getSingleVehicle = async (id: string | undefined | null) => {
+  // 🔥 1. If no vehicleId, return null instead of crashing
+  if (!id || id.trim() === "") {
+    return null;
+  }
+
   try {
-    const docRef = doc(vehicleRef, id);
+    // 🔥 2. Correct Firestore doc path
+    const docRef = doc(db, "vehicles", id);
     const docSnap = await getDoc(docRef);
+
     if (docSnap.exists()) {
       return { id: docSnap.id, ...docSnap.data() };
     } else {
-      throw new Error("Vehicle not found");
+      return null; // Vehicle not found
     }
   } catch (error) {
     console.error("❌ Error fetching vehicle:", error);
-    throw error;
+    return null; // Always return safe value
   }
 };
 

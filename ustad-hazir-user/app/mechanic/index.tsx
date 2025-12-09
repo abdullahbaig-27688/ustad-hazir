@@ -4,11 +4,20 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { doc, getDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getSingleVehicle } from "@/backend/vehicleService";
 import {
   listenToAllServices,
+  listenToCompletedJobs,
   listenToCustomerRequests,
   updateRequestStatus,
 } from "@/backend/machenicService";
@@ -17,19 +26,22 @@ const HomeScreen = () => {
   const [userName, setUserName] = useState("");
   const [requests, setRequests] = useState<any[]>([]);
   const [activeJob, setActiveJob] = useState<any | null>(null);
-
   const [services, setServices] = useState<any[]>([]);
+  const [completedJobs, setCompletedJobs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Fetch mechanic name
+  // Fetch mechanic name
   useEffect(() => {
     const fetchUserName = async () => {
       const user = auth.currentUser;
       if (user) {
         try {
           const userDoc = await getDoc(doc(db, "users", user.uid));
-          if (userDoc.exists()) setUserName(userDoc.data().name || "Mechanic");
-          else setUserName(user.displayName || "Mechanic");
+          setUserName(
+            userDoc.exists()
+              ? userDoc.data().name || "Mechanic"
+              : user.displayName || "Mechanic"
+          );
         } catch (error) {
           console.error("Error fetching user name:", error);
         }
@@ -38,111 +50,93 @@ const HomeScreen = () => {
     fetchUserName();
   }, []);
 
-  // ✅ Fetch mechanic’s services
+  // Fetch services
   useEffect(() => {
-    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        const unsubscribeServices = listenToAllServices((data) => {
+        const unsubServices = listenToAllServices((data) => {
           setServices(data);
           setLoading(false);
         });
-        return () => unsubscribeServices();
+        return () => unsubServices();
       } else {
         setServices([]);
         setLoading(false);
       }
     });
-    return () => unsubscribeAuth();
-  }, []);
-
-  // Listen for active Jobs
-  useEffect(() => {
-    const acceptedJob = requests.find((r) => r.status === "accepted") || null;
-    setActiveJob(acceptedJob);
-  }, [requests]);
-
-  // ✅ Listen for customer requests
-  useEffect(() => {
-    const unsubscribe = listenToCustomerRequests((data) => setRequests(data));
     return () => unsubscribe();
   }, []);
 
+  // Listen for requests and enrich with vehicle
   useEffect(() => {
-    const fetchRequestsWithVehicles = async () => {
-      const unsubscribe = listenToCustomerRequests(async (data) => {
-        const requestsWithVehicles = await Promise.all(
-          data.map(async (request) => {
-            if (request.vehicleId) {
-              try {
-                const vehicle = await getSingleVehicle(request.vehicleId);
-                const vehicleName = vehicle
-                  ? `${vehicle.brand} ${vehicle.model} (${vehicle.year}) - ${vehicle.color}`
-                  : "N/A";
-                return { ...request, vehicleName };
-              } catch (err) {
-                console.error("Error fetching vehicle:", err);
-                return { ...request, vehicleName: "N/A" };
-              }
-            } else {
+    const unsubscribe = listenToCustomerRequests(async (data) => {
+      const enriched = await Promise.all(
+        data.map(async (request) => {
+          if (request.vehicleId) {
+            try {
+              const vehicle = await getSingleVehicle(request.vehicleId);
+              const vehicleName = vehicle
+                ? `${vehicle.brand} ${vehicle.model} (${vehicle.year}) - ${vehicle.color}`
+                : "N/A";
+              return { ...request, vehicleName };
+            } catch {
               return { ...request, vehicleName: "N/A" };
             }
-          })
-        );
-        setRequests(requestsWithVehicles);
-      });
-
-      return () => unsubscribe();
-    };
-
-    fetchRequestsWithVehicles();
+          }
+          return { ...request, vehicleName: "N/A" };
+        })
+      );
+      setRequests(enriched);
+      const acceptedJob = enriched.find((r) => r.status === "accepted") || null;
+      setActiveJob(acceptedJob);
+    });
+    return () => unsubscribe();
   }, []);
 
-  // ✅ Accept/Reject requests
+  // Listen for completed jobs
+  useEffect(() => {
+    const mechanic = auth.currentUser;
+    if (!mechanic) return;
+    const unsubscribe = listenToCompletedJobs(mechanic.uid, setCompletedJobs);
+    return () => unsubscribe();
+  }, []);
+
   const handleAccept = async (request) => {
     const mechanic = auth.currentUser;
     if (!mechanic) return;
-
     try {
-      // 1️⃣ Update request status
       await updateRequestStatus(request.id, "accepted");
-
-      // ✅ Fetch vehicle details
       const vehicle = await getSingleVehicle(request.vehicleId);
       const vehicleName = vehicle
         ? `${vehicle.brand} ${vehicle.model} (${vehicle.year}) - ${vehicle.color}`
         : "N/A";
-      const activeJobWithVehicle = {
-        ...request,
-        vehicleName,
-      };
+      setActiveJob({ ...request, vehicleName });
 
-      // 2️⃣ Set as active job
-      setActiveJob(activeJobWithVehicle);
-
-      // 2️⃣ Create chat (between customer and mechanic)
-      const chatId = await createChatIfNotExists(
-        request.ownerId, // ✅ Customer’s UID from Firestore
-        mechanic.uid, // ✅ Mechanic’s UID
-        request.customerName, // ✅ Customer’s name
-        mechanic.displayName || "Mechanic" // ✅ Mechanic’s name
+      await createChatIfNotExists(
+        request.ownerId,
+        mechanic.uid,
+        request.customerName,
+        mechanic.displayName || "Mechanic"
       );
-
-      if (chatId) {
-        console.log("✅ Chat created:", chatId);
-
-        // 3️⃣ Redirect to chat screen
-        // router.push({
-        //   pathname: "/mechanic/inbox",
-        //   params: { chatId },
-        // });
-      }
     } catch (error) {
-      console.error("❌ Error accepting request:", error);
+      console.error("Error accepting request:", error);
     }
   };
 
-  const handleReject = async (id: string) =>
+  const handleReject = async (id: string) => {
     await updateRequestStatus(id, "rejected");
+  };
+
+  const markJobAsCompleted = async () => {
+    if (!activeJob) return;
+    try {
+      await updateRequestStatus(activeJob.id, "completed");
+      // setCompletedJobs((prev) => [...prev, activeJob]);
+      setActiveJob(null);
+    } catch (error) {
+      console.error("Error marking job completed:", error);
+    }
+  };
 
   const renderRequest = ({ item }) => (
     <View style={styles.jobCard}>
@@ -193,145 +187,167 @@ const HomeScreen = () => {
     </View>
   );
 
+  const renderCompletedJobs = ({ item }) => {
+    return (
+      <View style={styles.jobCompleted}>
+        <Text style={styles.jobService}>{item.serviceType}</Text>
+        <Text>Customer: {item.customerName}</Text>
+        <Text>Vehicle: {item.vehicleName}</Text>
+        <Text style={styles.jobTime}>
+          Completed on:{" "}
+          {item.createdAt
+            ? new Date(item.createdAt.seconds * 1000).toLocaleString()
+            : "N/A"}
+        </Text>
+      </View>
+    );
+  };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ActivityIndicator
+          size="large"
+          color="#0D47A1"
+          style={{ marginTop: 50 }}
+        />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        data={[]}
-        keyExtractor={() => "dummy"}
-        renderItem={null}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 100 }}
-        ListHeaderComponent={
-          <View style={styles.header}>
-            {/* 🟢 Greeting */}
-            <Text style={styles.greeting}>
-              Good Morning, {userName || "Mechanic"} 👋
-            </Text>
-            <Text style={styles.subGreeting}>Ready for a productive day?</Text>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 100, paddingHorizontal: 20 }}
+      >
+        {/* Greeting */}
+        <Text style={styles.greeting}>Good Morning, {userName} 👋</Text>
+        <Text style={styles.subGreeting}>Ready for a productive day?</Text>
 
-            {/* 🗺️ Active Job with Map Placeholder */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Active Job</Text>
-              <View style={styles.activeJobBox}>
-                {activeJob ? (
-                  <>
-                    <Text style={styles.jobService}>
-                      {activeJob.serviceType}
-                    </Text>
-                    <Text>Customer: {activeJob.customerName}</Text>
-                    <Text>Vehicle: {activeJob.vehicleName}</Text>
-                    {/* {activeJob.vehicle && (
-                      <Text>
-                        Vehicle: {activeJob.vehicle.brand}{" "}
-                        {activeJob.vehicle.model} ({activeJob.vehicle.year}) -{" "}
-                        {activeJob.vehicle.color}
-                      </Text>
-                    )} */}
-                    <Text style={styles.jobTime}>
-                      {activeJob.createdAt
-                        ? new Date(
-                            activeJob.createdAt.seconds * 1000
-                          ).toLocaleString()
-                        : "Pending"}
-                    </Text>
-                  </>
-                ) : (
-                  <Text style={styles.placeholderText}>
-                    No active jobs right now.
-                  </Text>
-                )}
-              </View>
-            </View>
-
-            {/* 🧾 Customer Requests */}
-            <View style={styles.section}>
-              <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>New Requests</Text>
-                <Pressable>
-                  <Text style={styles.seeAllButton}>See All</Text>
-                </Pressable>
-              </View>
-              {requests.length > 0 ? (
-                <FlatList
-                  data={requests}
-                  keyExtractor={(item) => item.id}
-                  renderItem={renderRequest}
-                  scrollEnabled={false}
-                />
-              ) : (
-                <Text style={styles.placeholderText}>No new requests.</Text>
-              )}
-            </View>
-
-            {/* 🛠 My Services */}
-            <View style={styles.section}>
-              <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>My Services</Text>
-                <Pressable onPress={() => router.push("/mechanic/allServices")}>
-                  <Text style={styles.seeAllButton}>See All</Text>
-                </Pressable>
-              </View>
-
-              {services.length === 0 ? (
-                <Pressable
-                  onPress={() => router.push("/mechanic/addService")}
-                  style={styles.addServiceCard}
-                >
-                  <Ionicons
-                    name="add-circle-outline"
-                    size={40}
-                    color="#0D47A1"
-                  />
-                  <Text style={styles.addServiceText}>Add your Service</Text>
-                </Pressable>
-              ) : (
-                <FlatList
-                  data={services}
-                  keyExtractor={(item, index) =>
-                    item.id ? item.id.toString() : index.toString()
-                  }
-                  renderItem={renderService}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={styles.servicesGrid}
-                />
-              )}
-            </View>
-
-            {/* 💸 Earnings Summary */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Earnings Summary</Text>
-              <View style={styles.dashboard}>
-                <View style={styles.summaryBox}>
-                  <Text style={styles.summaryLabel}>Total Earnings</Text>
-                  <Text style={styles.summaryValue}>PKR 15,000</Text>
-                </View>
-                <View style={styles.summaryBox}>
-                  <Text style={styles.summaryLabel}>Pending Payments</Text>
-                  <Text style={styles.summaryValue}>PKR 2,000</Text>
-                </View>
-                <View style={styles.summaryBox}>
-                  <Text style={styles.summaryLabel}>Jobs Completed</Text>
-                  <Text style={styles.summaryValue}>12</Text>
+        {/* Active Job */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Active Job</Text>
+          <View style={styles.activeJobBox}>
+            {activeJob ? (
+              <View>
+                <Text style={styles.jobService}>{activeJob.serviceType}</Text>
+                <Text>Customer: {activeJob.customerName}</Text>
+                <Text>Vehicle: {activeJob.vehicleName}</Text>
+                <Text style={styles.jobTime}>
+                  {activeJob.createdAt
+                    ? new Date(
+                        activeJob.createdAt.seconds * 1000
+                      ).toLocaleString()
+                    : "Pending"}
+                </Text>
+                <View style={{ flexDirection: "row", marginTop: 15 }}>
+                  <Pressable
+                    onPress={markJobAsCompleted}
+                    style={[
+                      styles.button,
+                      { backgroundColor: "#4CAF50", marginRight: 10 },
+                    ]}
+                  >
+                    <Text style={styles.buttonText}>Mark Completed</Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => setActiveJob(null)}
+                    style={[styles.button, { backgroundColor: "#F44336" }]}
+                  >
+                    <Text style={styles.buttonText}>Cancel Job</Text>
+                  </Pressable>
                 </View>
               </View>
-            </View>
-
-            {/* 📜 Recent Jobs */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Recent Jobs</Text>
+            ) : (
               <Text style={styles.placeholderText}>
-                You haven’t completed any jobs yet.
+                No active jobs right now.
               </Text>
-            </View>
+            )}
           </View>
-        }
-      />
+        </View>
+
+        {/* Requests */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>New Requests</Text>
+            <Pressable>
+              <Text style={styles.seeAllButton}>See All</Text>
+            </Pressable>
+          </View>
+          {requests.length ? (
+            <FlatList
+              data={requests}
+              keyExtractor={(item) => item.id}
+              renderItem={renderRequest}
+              scrollEnabled={false}
+            />
+          ) : (
+            <Text style={styles.placeholderText}>No new requests.</Text>
+          )}
+        </View>
+
+        {/* Services */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>My Services</Text>
+            <Pressable onPress={() => router.push("/mechanic/allServices")}>
+              <Text style={styles.seeAllButton}>See All</Text>
+            </Pressable>
+          </View>
+          {services.length === 0 ? (
+            <Pressable
+              onPress={() => router.push("/mechanic/addService")}
+              style={styles.addServiceCard}
+            >
+              <Ionicons name="add-circle-outline" size={40} color="#0D47A1" />
+              <Text style={styles.addServiceText}>Add your Service</Text>
+            </Pressable>
+          ) : (
+            <FlatList
+              data={services}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={renderService}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.servicesGrid}
+            />
+          )}
+        </View>
+
+        {/* Completed Jobs */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Completed Jobs</Text>
+            {completedJobs.length > 3 && (
+              <Pressable onPress={() => router.push("/mechanic/completedJobs")}>
+                <Text style={styles.seeAllButton}>See All</Text>
+              </Pressable>
+            )}
+          </View>
+
+          {completedJobs.length ? (
+            <FlatList
+              data={completedJobs.slice(0, 3)} // Show only first 3 completed jobs
+              keyExtractor={(item, index) =>
+                item.id?.toString() || index.toString()
+              }
+              renderItem={renderCompletedJobs}
+              scrollEnabled={false}
+            />
+          ) : (
+            <Text style={styles.placeholderText}>
+              You haven’t completed any jobs yet.
+            </Text>
+          )}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
 
 export default HomeScreen;
+
+// Styles remain the same as your previous version
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F9FAFB" },
@@ -448,6 +464,16 @@ const styles = StyleSheet.create({
   jobService: { fontSize: 16, fontWeight: "bold" },
   jobTime: { fontSize: 12, color: "#555", marginTop: 4 },
   actionButtons: { flexDirection: "column", marginLeft: 50 },
+  jobCompleted:{
+     flexDirection: "column",
+    // backgroundColor: "#fff",
+    backgroundColor: "#f0f4ff",
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
+    alignItems: "center",
+    borderWidth: 1,
+  },
   button: {
     paddingVertical: 6,
     paddingHorizontal: 12,

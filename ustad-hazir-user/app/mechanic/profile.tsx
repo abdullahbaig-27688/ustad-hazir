@@ -12,6 +12,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  BackHandler,
 } from "react-native";
 import { auth, storage, db } from "@/src/firebaseConfig";
 import { router } from "expo-router";
@@ -22,14 +23,54 @@ import { doc, updateDoc, getDoc } from "firebase/firestore";
 import Button from "@/components/Button";
 import ProfileHeader from "@/components/Header";
 import { useTranslation } from "react-i18next";
+const languages = [
+  {
+    code: "en",
+    label: "English",
+    flag: require("@/assets/images/flags/usa.png"),
+  },
+  { code: "ur", label: "اردو", flag: require("@/assets/images/flags/pak.png") },
+  {
+    code: "fr",
+    label: "Français",
+    flag: require("@/assets/images/flags/fra.png"),
+  },
+];
+const LanguageModal = ({ visible, onClose, i18n }: any) => {
+  const changeLanguage = (langCode: string) => {
+    i18n.changeLanguage(langCode);
+    onClose();
+  };
+
+  return (
+    <Pressable
+      style={[styles.modalOverlay, { display: visible ? "flex" : "none" }]}
+      onPress={onClose}
+    >
+      <View style={styles.modalContent}>
+        {languages.map((lang) => (
+          <Pressable
+            key={lang.code}
+            style={styles.langOption}
+            onPress={() => changeLanguage(lang.code)}
+          >
+            <Image source={lang.flag} style={styles.flagIcon} />
+            <Text style={styles.langText}>{lang.label}</Text>
+          </Pressable>
+        ))}
+      </View>
+    </Pressable>
+  );
+};
 
 const ProfileScreen = () => {
-  const { t } = useTranslation(); // <-- TRANSLATION HOOK
+  const { t, i18n } = useTranslation(); // <-- TRANSLATION HOOK
 
   const [user, setUser] = useState<any>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [langModalVisible, setLangModalVisible] = useState(false);
 
   useEffect(() => {
     const currentUser = auth.currentUser;
@@ -124,6 +165,7 @@ const ProfileScreen = () => {
     try {
       await auth.signOut();
       router.replace("/login");
+      if (Platform.OS === "android") BackHandler.exitApp();
     } catch (error) {
       console.error(error);
       Alert.alert(t("error"), t("logout_failed"));
@@ -198,7 +240,19 @@ const ProfileScreen = () => {
               type="secondary"
               onPress={handleLogout}
             />
+            <Button
+              title={t("changeLanguage")}
+              type="tertiary"
+              onPress={() => setLangModalVisible(true)}
+              style={{ marginTop: 10 }}
+            />
           </View>
+          {/* Language Modal */}
+          <LanguageModal
+            visible={langModalVisible}
+            onClose={() => setLangModalVisible(false)}
+            i18n={i18n}
+          />
         </ScrollView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -268,5 +322,36 @@ const styles = StyleSheet.create({
   },
   buttonSection: {
     width: "80%",
+  },
+  // Language Modal Styles
+  modalOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.3)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 15,
+    width: 180,
+  },
+  langOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 8,
+  },
+  flagIcon: {
+    width: 30,
+    height: 20,
+    resizeMode: "contain",
+    marginRight: 10,
+  },
+  langText: {
+    fontSize: 16,
   },
 });
