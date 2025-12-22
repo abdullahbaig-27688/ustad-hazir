@@ -222,5 +222,23 @@
   "success_photo": "Photo de profil mise à jour !",
   "success_profile": "Profil mis à jour !",
   "error_update_profile": "Impossible de mettre à jour le profil.",
-  "error_requires_login": "Veuillez vous reconnecter pour mettre à jour l'email."
+  "error_requires_login": "Veuillez vous reconnecter pour mettre à jour l'email.",
+  "goodMorning": "Bonjour",
+    "readyDay": "Prêt pour une journée productive ?",
+    "activeJob": "Travail en cours",
+    "noActiveJobs": "Aucun travail actif pour le moment.",
+    "markCompleted": "Marquer comme terminé",
+    "cancelJob": "Annuler le travail",
+    "newRequests": "Nouvelles demandes",
+    "seeAll": "Voir tout",
+    "noNewRequests": "Aucune nouvelle demande.",
+    "myServices": "Mes services",
+  
+    "completedJobs": "Travaux terminés",
+    "noCompletedJobs": "Vous n’avez encore terminé aucun travail.",
+    "accept": "Accepter",
+    "reject": "Refuser",
+   
+    "completedOn": "Terminé le"
+  
 }

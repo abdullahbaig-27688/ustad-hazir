@@ -21,8 +21,11 @@ import {
   listenToCustomerRequests,
   updateRequestStatus,
 } from "@/backend/machenicService";
+import { useTranslation } from "react-i18next";
 
 const HomeScreen = () => {
+  const { t } = useTranslation();
+
   const [userName, setUserName] = useState("");
   const [requests, setRequests] = useState<any[]>([]);
   const [activeJob, setActiveJob] = useState<any | null>(null);
@@ -149,8 +152,12 @@ const HomeScreen = () => {
     <View style={styles.jobCard}>
       <View style={{ flex: 1 }}>
         <Text style={styles.jobService}>{item.serviceType}</Text>
-        <Text>Customer: {item.customerName}</Text>
-        <Text>Vehicle: {item.vehicleName}</Text>
+        <Text>
+          {t("home.customer")}: {item.customerName}
+        </Text>
+        <Text>
+          {t("home.vehicle")}: {item.vehicleName}
+        </Text>
         <Text style={styles.jobTime}>
           {item.createdAt
             ? new Date(item.createdAt.seconds * 1000).toLocaleString()
@@ -163,13 +170,13 @@ const HomeScreen = () => {
             style={[styles.button, { backgroundColor: "#4CAF50" }]}
             onPress={() => handleAccept(item)}
           >
-            <Text style={styles.buttonText}>Accept</Text>
+            <Text style={styles.buttonText}>{t("home.accept")}</Text>
           </Pressable>
           <Pressable
             style={[styles.button, { backgroundColor: "#F44336" }]}
             onPress={() => handleReject(item.id)}
           >
-            <Text style={styles.buttonText}>Reject</Text>
+            <Text style={styles.buttonText}>{t("home.reject")}</Text>
           </Pressable>
         </View>
       ) : (
@@ -198,8 +205,12 @@ const HomeScreen = () => {
     return (
       <View style={styles.jobCompleted}>
         <Text style={styles.jobService}>{item.serviceType}</Text>
-        <Text>Customer: {item.customerName}</Text>
-        <Text>Vehicle: {item.vehicleName}</Text>
+        <Text>
+          {t("customer")}: {item.customerName}
+        </Text>
+        <Text>
+          {t("vehicle")}: {item.vehicleName}
+        </Text>
         <Text style={styles.jobTime}>
           Completed on:{" "}
           {item.createdAt
@@ -228,18 +239,24 @@ const HomeScreen = () => {
         contentContainerStyle={{ paddingBottom: 100, paddingHorizontal: 20 }}
       >
         {/* Greeting */}
-        <Text style={styles.greeting}>Good Morning, {userName} 👋</Text>
-        <Text style={styles.subGreeting}>Ready for a productive day?</Text>
+        <Text style={styles.greeting}>
+          {t("goodMorning")}, {userName} 👋
+        </Text>
+        <Text style={styles.subGreeting}>{t("readyDay")}</Text>
 
         {/* Active Job */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Active Job</Text>
+          <Text style={styles.sectionTitle}>{t("activeJob")}</Text>
           <View style={styles.activeJobBox}>
             {activeJob ? (
               <View>
                 <Text style={styles.jobService}>{activeJob.serviceType}</Text>
-                <Text>Customer: {activeJob.customerName}</Text>
-                <Text>Vehicle: {activeJob.vehicleName}</Text>
+                <Text>
+                  {t("customer")}: {activeJob.customerName}
+                </Text>
+                <Text>
+                  {t("vehicle")}: {activeJob.vehicleName}
+                </Text>
                 <Text style={styles.jobTime}>
                   {activeJob.createdAt
                     ? new Date(
@@ -255,20 +272,18 @@ const HomeScreen = () => {
                       { backgroundColor: "#4CAF50", marginRight: 10 },
                     ]}
                   >
-                    <Text style={styles.buttonText}>Mark Completed</Text>
+                    <Text style={styles.buttonText}>{t("markCompleted")}</Text>
                   </Pressable>
                   <Pressable
                     onPress={() => setActiveJob(null)}
                     style={[styles.button, { backgroundColor: "#F44336" }]}
                   >
-                    <Text style={styles.buttonText}>Cancel Job</Text>
+                    <Text style={styles.buttonText}>{t("cancelJob")}</Text>
                   </Pressable>
                 </View>
               </View>
             ) : (
-              <Text style={styles.placeholderText}>
-                No active jobs right now.
-              </Text>
+              <Text style={styles.placeholderText}>{t("noActiveJobs")}</Text>
             )}
           </View>
         </View>
@@ -276,9 +291,9 @@ const HomeScreen = () => {
         {/* Requests */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>New Requests</Text>
+            <Text style={styles.sectionTitle}>{t("newRequests")}</Text>
             <Pressable>
-              <Text style={styles.seeAllButton}>See All</Text>
+              <Text style={styles.seeAllButton}>{t("seeAll")}</Text>
             </Pressable>
           </View>
           {requests.length ? (
@@ -289,16 +304,16 @@ const HomeScreen = () => {
               scrollEnabled={false}
             />
           ) : (
-            <Text style={styles.placeholderText}>No new requests.</Text>
+            <Text style={styles.placeholderText}>{t("noNewRequests")}</Text>
           )}
         </View>
 
         {/* Services */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>My Services</Text>
+            <Text style={styles.sectionTitle}>{t("myServices")}</Text>
             <Pressable onPress={() => router.push("/mechanic/allServices")}>
-              <Text style={styles.seeAllButton}>See All</Text>
+              <Text style={styles.seeAllButton}>{t("seeAll")}</Text>
             </Pressable>
           </View>
           {services.length === 0 ? (
@@ -307,7 +322,7 @@ const HomeScreen = () => {
               style={styles.addServiceCard}
             >
               <Ionicons name="add-circle-outline" size={40} color="#0D47A1" />
-              <Text style={styles.addServiceText}>Add your Service</Text>
+              <Text style={styles.addServiceText}>{t("addService")}</Text>
             </Pressable>
           ) : (
             <FlatList
@@ -324,10 +339,10 @@ const HomeScreen = () => {
         {/* Completed Jobs */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Completed Jobs</Text>
+            <Text style={styles.sectionTitle}>{t("completedJobs")}</Text>
             {completedJobs.length > 3 && (
               <Pressable onPress={() => router.push("/completedjobHistory")}>
-                <Text style={styles.seeAllButton}>See All</Text>
+                <Text style={styles.seeAllButton}>{t("seeAll")}</Text>
               </Pressable>
             )}
           </View>
@@ -342,9 +357,7 @@ const HomeScreen = () => {
               scrollEnabled={false}
             />
           ) : (
-            <Text style={styles.placeholderText}>
-              You haven’t completed any jobs yet.
-            </Text>
+            <Text style={styles.placeholderText}>{t("noCompletedJobs")}</Text>
           )}
         </View>
       </ScrollView>

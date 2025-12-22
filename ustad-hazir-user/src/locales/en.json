@@ -222,5 +222,27 @@
   "success_photo": "Profile picture updated!",
   "success_profile": "Profile updated!",
   "error_update_profile": "Failed to update profile.",
-  "error_requires_login": "Please logout and login again to update email."
+  "error_requires_login": "Please logout and login again to update email.",
+
+
+
+   "goodMorning": "Good Morning",
+    "readyDay": "Ready for a productive day?",
+    "activeJob": "Active Job",
+    "noActiveJobs": "No active jobs right now.",
+    "markCompleted": "Mark Completed",
+    "cancelJob": "Cancel Job",
+    "newRequests": "New Requests",
+    "seeAll": "See All",
+    "noNewRequests": "No new requests.",
+    "myServices": "My Services",
+   
+    "completedJobs": "Completed Jobs",
+    "noCompletedJobs": "You haven’t completed any jobs yet.",
+    "accept": "Accept",
+    "reject": "Reject",
+    
+    "completedOn": "Completed on"
+    
+  
 }

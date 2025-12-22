@@ -224,5 +224,25 @@
   "success_photo": "پروفائل تصویر اپ ڈیٹ ہو گئی!",
   "success_profile": "پروفائل اپ ڈیٹ ہو گئی!",
   "error_update_profile": "پروفائل اپ ڈیٹ نہیں ہو سکی۔",
-  "error_requires_login": "ای میل اپ ڈیٹ کرنے کے لیے دوبارہ لاگ ان کریں۔"
+  "error_requires_login": "ای میل اپ ڈیٹ کرنے کے لیے دوبارہ لاگ ان کریں۔",
+
+
+   "goodMorning": "صبح بخیر",
+    "readyDay": "کیا آپ ایک کامیاب دن کے لیے تیار ہیں؟",
+    "activeJob": "فعال کام",
+    "noActiveJobs": "فی الحال کوئی فعال کام نہیں ہے۔",
+    "markCompleted": "کام مکمل کریں",
+    "cancelJob": "کام منسوخ کریں",
+    "newRequests": "نئی درخواستیں",
+    "seeAll": "سب دیکھیں",
+    "noNewRequests": "کوئی نئی درخواست موجود نہیں۔",
+    "myServices": "میری خدمات",
+ 
+    "completedJobs": "مکمل شدہ کام",
+    "noCompletedJobs": "ابھی تک کوئی کام مکمل نہیں ہوا۔",
+    "accept": "قبول کریں",
+    "reject": "مسترد کریں",
+   
+    "completedOn": "مکمل ہونے کی تاریخ"
+    
 }
