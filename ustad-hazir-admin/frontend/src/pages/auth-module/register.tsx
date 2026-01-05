@@ -1,6 +1,8 @@
 import { useState } from "react";
 import InputFields from "../../components/inputFields";
-import api from "../../services/api";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../../firebaseConfig";
 import "./auth.css";
 
 const Register = () => {
@@ -10,15 +12,34 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
-      await api.registerAdmin({ name, email, password });
+      // 1️⃣ Create admin auth account
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const user = userCredential.user;
+
+      // 2️⃣ Store admin info in Firestore
+      await setDoc(doc(db, "admins", user.uid), {
+        name,
+        email,
+        role: "admin",
+        createdAt: new Date(),
+      });
+
       alert("Registration Successful!");
+
       setName("");
       setEmail("");
       setPassword("");
+
       window.location.href = "/login";
     } catch (error: any) {
-      alert(error.response?.data?.message || "Server error");
+      alert(error.message || "Registration failed");
     }
   };
 
@@ -37,7 +58,7 @@ const Register = () => {
             <div>
               <h1 className="brand-title">Ustad Hazir.</h1>
               <p className="brand-desc">
-                “Fast, trusted roadside help at your fingertips.”
+                “Fast, trusted roadside help at your fingertips.”
               </p>
             </div>
           </div>
@@ -58,6 +79,7 @@ const Register = () => {
                 onChange={setName}
                 required
               />
+
               <InputFields
                 type="email"
                 label="Email"
@@ -66,6 +88,7 @@ const Register = () => {
                 onChange={setEmail}
                 required
               />
+
               <InputFields
                 type="password"
                 label="Password"
@@ -74,9 +97,11 @@ const Register = () => {
                 onChange={setPassword}
                 required
               />
+
               <button type="submit" className="login-btn">
                 Register
               </button>
+
               <a href="/login" className="forgot-password">
                 Already have an account? Login
               </a>

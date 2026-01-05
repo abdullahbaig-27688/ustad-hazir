@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import "../dashboard-module/dashboard.css"; // ✅ Use same CSS for consistent layout
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth, db } from "../../firebaseConfig";
+import Sidebar from "../../components/sidebar";
+import "../dashboard-module/dashboard.css";
 import "./allmechanic.css";
+
 interface Mechanic {
   id: string;
   name: string;
@@ -14,63 +17,67 @@ interface Mechanic {
 
 const ViewMechanics = () => {
   const navigate = useNavigate();
-  const adminToken = localStorage.getItem("adminToken");
+  const [loading, setLoading] = useState(true);
   const [mechanics, setMechanics] = useState<Mechanic[]>([]);
 
   useEffect(() => {
-    if (!adminToken) navigate("/login");
-    const fetchMechanics = async (role: "customer" | "mechanic") => {
-      const q = query(collection(db, "users"), where("role", "==", role));
-      const querySnapShot = await getDocs(q);
-      const mechanicData: Mechanic[] = [];
-      querySnapShot.forEach((doc) => {
-        const data = doc.data();
-        mechanicData.push({
-          id: doc.id,
-          name: data.name,
-          email: data.email,
-          contact: data.contact,
-          status: data.status,
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        navigate("/login");
+        return;
+      }
+
+      const fetchMechanics = async () => {
+        const q = query(
+          collection(db, "users"),
+          where("role", "==", "mechanic")
+        );
+        const snapshot = await getDocs(q);
+        const mechanicData: Mechanic[] = [];
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          mechanicData.push({
+            id: doc.id,
+            name: data.name,
+            email: data.email,
+            contact: data.contact,
+            status: data.status,
+          });
         });
-      });
+        setMechanics(mechanicData);
+        setLoading(false);
+      };
 
-      setMechanics(mechanicData);
-    };
+      fetchMechanics();
+    });
 
-    fetchMechanics("mechanic");
-  }, [adminToken, navigate]);
+    return () => unsubscribe();
+  }, [navigate]);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/login");
+  };
 
   return (
-    <div className="admin-wrapper">
-      {/* Sidebar (same as dashboard) */}
-      <aside className="sidebar">
-        <h2>Ustad Hazir</h2>
-        <ul>
-          <li onClick={() => navigate("/dashboard")}>🏠 Dashboard</li>
-          <li onClick={() => navigate("/allmechanic-module")}>🧰 Mechanics</li>
-          <li onClick={() => navigate("/allcustomer-module")}>👥 Customers</li>
-          <li onClick={() => navigate("/request-module")}>📩 Requests</li>
-          <li
-            onClick={() => {
-              localStorage.removeItem("adminToken");
-              navigate("/login");
-            }}
-          >
-            🚪 Logout
-          </li>
-        </ul>
-      </aside>
+    <div className="mechanic-container">
+      <Sidebar handleLogout={handleLogout} />
 
-      {/* Content */}
-      <main className="admin-content">
-        <header className="dashboard-header">
-          <h2>Registered Mechanics</h2>
+      <main className="mechanic-content">
+        <header className="mechanic-header">
+          <h2>🔧 Registered Mechanics</h2>
         </header>
+        {loading && <p>Loading Registered Mechanics...</p>}
 
-        <section className="dashboard-content">
+        {!loading && mechanics.length === 0 && (
+          <p>No Registered Mechanics found.</p>
+        )}
+        {/* ✅ Cards container */}
+        <div className="mechanic-cards">
           {mechanics.map((mech) => (
             <div className="card" key={mech.id}>
               <h3>🧰 {mech.name}</h3>
+
               <p>
                 <strong>Email:</strong> {mech.email}
               </p>
@@ -80,6 +87,7 @@ const ViewMechanics = () => {
               <p>
                 <strong>Status:</strong> {mech.status}
               </p>
+
               <button
                 className="card-btn"
                 onClick={() => navigate(`/mechanic-details/${mech.id}`)}
@@ -88,7 +96,7 @@ const ViewMechanics = () => {
               </button>
             </div>
           ))}
-        </section>
+        </div>
       </main>
     </div>
   );

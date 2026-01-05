@@ -103,16 +103,51 @@ const HomeScreen = () => {
     const unsubscribe = listenToCompletedJobs(mechanic.uid, setCompletedJobs);
     return () => unsubscribe();
   }, []);
+  // const handleAccept = async (request) => {
+  //   const mechanic = auth.currentUser;
+  //   if (!mechanic) return;
+
+  //   try {
+  //     await updateRequestStatus(
+  //       request.id,
+  //       "accepted",
+  //       mechanic.uid,
+  //       mechanic.displayName || "Mechanic"
+  //     );
+
+  //     const vehicle = await getSingleVehicle(request.vehicleId);
+  //     const vehicleName = vehicle
+  //       ? `${vehicle.brand} ${vehicle.model} (${vehicle.year}) - ${vehicle.color}`
+  //       : "N/A";
+
+  //     setActiveJob({ ...request, vehicleName });
+
+  //     await createChatIfNotExists(
+  //       request.ownerId,
+  //       mechanic.uid,
+  //       request.customerName,
+  //       mechanic.displayName || "Mechanic"
+  //     );
+  //   } catch (error) {
+  //     console.error("Error accepting request:", error);
+  //   }
+  // };
   const handleAccept = async (request) => {
     const mechanic = auth.currentUser;
     if (!mechanic) return;
 
     try {
+      // ✅ Fetch REAL mechanic name from users collection
+      const mechanicDoc = await getDoc(doc(db, "users", mechanic.uid));
+      const mechanicName = mechanicDoc.exists()
+        ? mechanicDoc.data().name
+        : "Mechanic";
+
       await updateRequestStatus(
         request.id,
         "accepted",
         mechanic.uid,
-        mechanic.displayName || "Mechanic"
+        mechanicName // ✅ REAL NAME
       );
 
       const vehicle = await getSingleVehicle(request.vehicleId);
@@ -126,7 +161,7 @@ const HomeScreen = () => {
         request.ownerId,
         mechanic.uid,
         request.customerName,
-        mechanic.displayName || "Mechanic"
+        mechanicName // ✅ SAME REAL NAME
       );
     } catch (error) {
       console.error("Error accepting request:", error);
@@ -153,10 +188,10 @@ const HomeScreen = () => {
       <View style={{ flex: 1 }}>
         <Text style={styles.jobService}>{item.serviceType}</Text>
         <Text>
-          {t("home.customer")}: {item.customerName}
+          {t("customer")}: {item.customerName}
         </Text>
         <Text>
-          {t("home.vehicle")}: {item.vehicleName}
+          {t("vehicle")}: {item.vehicleName}
         </Text>
         <Text style={styles.jobTime}>
           {item.createdAt
@@ -170,13 +205,13 @@ const HomeScreen = () => {
             style={[styles.button, { backgroundColor: "#4CAF50" }]}
             onPress={() => handleAccept(item)}
           >
-            <Text style={styles.buttonText}>{t("home.accept")}</Text>
+            <Text style={styles.buttonText}>{t("accept")}</Text>
           </Pressable>
           <Pressable
             style={[styles.button, { backgroundColor: "#F44336" }]}
             onPress={() => handleReject(item.id)}
           >
-            <Text style={styles.buttonText}>{t("home.reject")}</Text>
+            <Text style={styles.buttonText}>{t("reject")}</Text>
           </Pressable>
         </View>
       ) : (

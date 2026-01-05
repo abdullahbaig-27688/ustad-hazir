@@ -1,65 +1,131 @@
+/* Layout container */
+.admin-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Main scrollable content */
+.admin-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Page background */
+.customer-details {
+  padding: 20px;
+  background: url("https://www.datocms-assets.com/49357/1693204664-roadside-under-car-bonnet.jpg?auto=format&crop=focalpoint&fit=crop")
+    no-repeat center center;
+  background-size: cover;
+  color: #fff;
+  position: relative;
+}
+
+/* Dark overlay */
+.customer-details::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 0;
+}
+
+/* Bring content above overlay */
+.customer-details > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
 .customer-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 50%;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
-.customer-details {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+.customer-header h2 {
+  color: #ffeb3b;
 }
 
+/* Back button (same as mechanic) */
 .back-btn {
-  padding: 6px 12px;
-  background-color: #007bff;
-  color: #fff;
+  padding: 8px 16px;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.details-card {
-  background-color: #1a1a1a;
+  background: linear-gradient(45deg, #1e90ff, #00bfff);
   color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 30px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
 }
 
-.vehicle-section {
-  margin-top: 20px;
+.back-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 191, 255, 0.5);
+  background: linear-gradient(45deg, #00bfff, #1e90ff);
 }
 
+/* Details card */
+.details-card {
+  background: linear-gradient(145deg, #1c1c1c, #121212);
+  color: #f0f0f0;
+  padding: 25px;
+  border-radius: 14px;
+  margin-bottom: 35px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+
+.details-card p {
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.details-card strong {
+  color: #9ad1ff;
+}
+
+/* Vehicle section */
+.vehicle-section h3 {
+  margin-bottom: 15px;
+  color: #ffeb3b;
+}
+
+/* Vehicle list */
 .vehicle-list {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
 }
 
+/* Vehicle card (same style as service-card) */
 .vehicle-card {
-  background-color: #222;
-  color: #fff;
-  width: 260px;
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  background: linear-gradient(145deg, #222, #111);
+  color: #f0f0f0;
+  padding: 15px;
+  border-radius: 14px;
+  flex: 1 1 250px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7);
 }
 
 .vehicle-card img {
   width: 100%;
-  height: 150px;
-  object-fit: cover;
-  background-color: #333;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 
-.vehicle-info {
-  padding: 10px;
-  font-size: 14px;
-}
-
+/* Vehicle info text */
 .vehicle-info p {
-  margin: 3px 0;
+  margin: 6px 0;
+  line-height: 1.4;
+}
+
+.vehicle-info strong {
+  color: #9ad1ff;
 }

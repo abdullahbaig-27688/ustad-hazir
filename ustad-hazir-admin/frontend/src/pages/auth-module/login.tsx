@@ -1,6 +1,8 @@
 import { useState } from "react";
 import InputFields from "../../components/inputFields";
-import api from "../../services/api";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../../firebaseConfig";
 import "./auth.css";
 
 const Login = () => {
@@ -9,15 +11,34 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
-      const { data } = await api.loginAdmin({ email, password });
-      localStorage.setItem("adminToken", data.token);
+      // 1️⃣ Firebase Auth Login
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const user = userCredential.user;
+
+      // 2️⃣ Verify admin role from Firestore
+      const adminRef = doc(db, "admins", user.uid);
+      const adminSnap = await getDoc(adminRef);
+
+      if (!adminSnap.exists()) {
+        alert("Access denied. Admin account not found.");
+        return;
+      }
+
       alert("Login Successful!");
+
       setEmail("");
       setPassword("");
+
       window.location.href = "/dashboard";
     } catch (error: any) {
-      alert(error.response?.data?.message || "Server error");
+      alert(error.message || "Login failed");
     }
   };
 
@@ -36,7 +57,7 @@ const Login = () => {
             <div>
               <h1 className="brand-title">Ustad Hazir</h1>
               <p className="brand-desc">
-                “Fast, trusted roadside help at your fingertips.”
+                “Fast, trusted roadside help at your fingertips.”
               </p>
             </div>
           </div>
@@ -57,6 +78,7 @@ const Login = () => {
                 onChange={setEmail}
                 required
               />
+
               <InputFields
                 type="password"
                 label="Password"
@@ -65,9 +87,11 @@ const Login = () => {
                 onChange={setPassword}
                 required
               />
+
               <button type="submit" className="login-btn">
                 Login
               </button>
+
               <a href="/register" className="forgot-password">
                 Don't have account? Register
               </a>

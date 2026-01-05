@@ -1,14 +1,12 @@
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../../firebaseConfig";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
-import "../dashboard-module/dashboard.css"; // ✅ Same CSS ensures perfect alignment
+import Sidebar from "../../components/sidebar";
+import "../dashboard-module/dashboard.css";
 import "./allCustomer.css";
-interface Vehicle {
-  id: string;
-  model: string;
-  plate: string;
-}
 
 interface Customer {
   id: string;
@@ -16,68 +14,73 @@ interface Customer {
   email: string;
   contact: string;
   status: string;
-  vehicles?: Vehicle[];
+  vehicles: any[];
 }
 
 const ViewCustomers = () => {
   const navigate = useNavigate();
-  const adminToken = localStorage.getItem("adminToken");
+  const [loading, setLoading] = useState(true);
   const [customers, setCustomers] = useState<Customer[]>([]);
 
   useEffect(() => {
-    if (!adminToken) navigate("/login");
-    const fetchCustomers = async (role: "customer" | "mechanic") => {
-      const q = query(collection(db, "users"), where("role", "==", role));
-      const querySnapShot = await getDocs(q);
-      const customersData: Customer[] = [];
-      querySnapShot.forEach((doc) => {
-        const data = doc.data();
-        customersData.push({
-          id: doc.id,
-          name: data.name,
-          email: data.email,
-          contact: data.contact,
-          status: data.status,
-          vehicles: data.vehicles || [],
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        navigate("/login");
+        return;
+      }
+
+      const fetchCustomers = async () => {
+        const q = query(
+          collection(db, "users"),
+          where("role", "==", "customer")
+        );
+        const querySnapShot = await getDocs(q);
+        const customersData: Customer[] = [];
+        querySnapShot.forEach((doc) => {
+          const data = doc.data();
+          customersData.push({
+            id: doc.id,
+            name: data.name,
+            email: data.email,
+            contact: data.contact,
+            status: data.status,
+            vehicles: data.vehicles || [],
+          });
         });
-      });
+        setCustomers(customersData);
+        setLoading(false);
+      };
 
-      setCustomers(customersData);
-    };
+      fetchCustomers();
+    });
 
-    fetchCustomers("customer");
-  }, [adminToken, navigate]);
+    return () => unsubscribe();
+  }, [navigate]);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/login");
+  };
 
   return (
-    <div className="admin-wrapper">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <h2>Ustad Hazir</h2>
-        <ul>
-          <li onClick={() => navigate("/dashboard")}>🏠 Dashboard</li>
-          <li onClick={() => navigate("/allmechanic-module")}>🧰 Mechanics</li>
-          <li onClick={() => navigate("/allcustomer-module")}>👥 Customers</li>
-          <li onClick={() => navigate("/request-module")}>📩 Requests</li>
-          <li
-            onClick={() => {
-              localStorage.removeItem("adminToken");
-              navigate("/login");
-            }}
-          >
-            🚪 Logout
-          </li>
-        </ul>
-      </aside>
+    <div className="customer-container">
+      <Sidebar handleLogout={handleLogout} />
 
-      {/* Content */}
-      <main className="admin-content">
-        <header className="dashboard-header">
-          <h2>Registered Customers</h2>
+      <main className="customer-content">
+        <header className="customer-header">
+          <h2>🧑‍🤝‍🧑 Registered Customers</h2>
         </header>
-        <section className="dashboard-content">
+        {loading && <p>Loading Registered Customers ...</p>}
+
+        {!loading && customers.length === 0 && (
+          <p>No Registered Customer found.</p>
+        )}
+        {/* ✅ Cards container */}
+        <div className="customer-cards">
           {customers.map((cust) => (
             <div className="card" key={cust.id}>
               <h3>👤 {cust.name}</h3>
+
               <p>
                 <strong>Email:</strong> {cust.email}
               </p>
@@ -87,15 +90,16 @@ const ViewCustomers = () => {
               <p>
                 <strong>Status:</strong> {cust.status}
               </p>
+
               <button
                 className="card-btn"
-                 onClick={() => navigate(`/customer-details/${cust.id}`)}
+                onClick={() => navigate(`/customer-details/${cust.id}`)}
               >
                 View Details
               </button>
             </div>
           ))}
-        </section>
+        </div>
       </main>
     </div>
   );

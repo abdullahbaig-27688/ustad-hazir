@@ -1,61 +1,104 @@
-.mechanic-header {
-  display: flex;
-  justify-content: space-between; /* push heading left, button right */
-  align-items: center;
-  margin-bottom: 20px;
-}
-
+/* Container alignment */
 .mechanic-details {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
+/* Header */
+.mechanic-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.mechanic-header h2,
+.mechanic-header h3 {
+  color: #ffeb3b;
+}
+
+/* Back button (blue theme) */
 .back-btn {
-  padding: 6px 12px;
-  background-color: #007bff;
-  color: #fff;
+  padding: 8px 16px;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.details-card {
-  background-color: #1a1a1a;
+  background: linear-gradient(45deg, #1e90ff, #00bfff);
   color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 30px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
 }
 
+.back-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 191, 255, 0.5);
+  background: linear-gradient(45deg, #00bfff, #1e90ff);
+}
+
+/* Main details card */
+.details-card {
+  background: linear-gradient(145deg, #1c1c1c, #121212);
+  color: #f0f0f0;
+  padding: 25px;
+  border-radius: 14px;
+  margin-bottom: 35px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+
+.details-card p {
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.details-card strong {
+  color: #9ad1ff;
+}
+
+/* Services section */
 .service-section {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
+.service-section h3 {
+  margin-bottom: 15px;
+  color: #ffeb3b;
+}
+
+/* Service cards layout */
 .service-list {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
 }
 
+/* Individual service card */
 .service-card {
-  background-color: #222;
-  color: #fff;
+  background: linear-gradient(145deg, #222, #111);
+  color: #f0f0f0;
   width: 260px;
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  border-radius: 14px;
+  padding: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s, box-shadow 0.3s;
 }
+
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7);
+}
+
+/* Service info */
 .service-info {
-  padding: 10px;
-  font-size: 14px;
-}
-.service-info p {
-  margin: 3px 0;
   font-size: 14px;
 }
 
+.service-info p {
+  margin: 6px 0;
+  line-height: 1.4;
+}
+
+/* Highlight labels */
 .service-card strong {
-  color: #ccc;
+  color: #9ad1ff;
 }
