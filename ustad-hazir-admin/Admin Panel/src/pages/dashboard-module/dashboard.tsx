@@ -63,14 +63,14 @@ const Dashboard = () => {
       };
 
       const fetchAcceptedJobs = async () => {
-        const snapshot= await getDocs(
+        const snapshot = await getDocs(
           query(
             collection(db, "serviceRequests"),
             where("status", "==", "accepted")
           )
         );
         setAcceptedJobs(snapshot.size);
-      }
+      };
       const fetchPendingJobs = async () => {
         const snapshot = await getDocs(
           query(
@@ -100,7 +100,8 @@ const Dashboard = () => {
     navigate("/login");
   };
 
-  if (loading) return <div style={{ textAlign: "center" }}>Loading...</div>;
+  if (loading)
+    return <div style={{ textAlign: "center" }}>Loading Dashboard</div>;
 
   return (
     <div className="dashboard-container">
@@ -165,7 +166,7 @@ const Dashboard = () => {
               View Requests
             </button>
           </div>
-           <div className="card">
+          <div className="card">
             <h3>📩 Accepted Jobs</h3>
             <p>{acceptedJobs}</p>
             <button

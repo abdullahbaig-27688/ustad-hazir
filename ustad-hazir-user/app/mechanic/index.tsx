@@ -98,11 +98,33 @@ const HomeScreen = () => {
 
   // Listen for completed jobs
   useEffect(() => {
-    const mechanic = auth.currentUser;
-    if (!mechanic) return;
-    const unsubscribe = listenToCompletedJobs(mechanic.uid, setCompletedJobs);
-    return () => unsubscribe();
-  }, []);
+  const mechanic = auth.currentUser;
+  if (!mechanic) return;
+
+  const unsubscribe = listenToCompletedJobs(mechanic.uid, async (jobs) => {
+    const enrichedJobs = await Promise.all(
+      jobs.map(async (job) => {
+        if (job.vehicleId) {
+          try {
+            const vehicle = await getSingleVehicle(job.vehicleId);
+            const vehicleName = vehicle
+              ? `${vehicle.brand} ${vehicle.model} (${vehicle.year}) - ${vehicle.color}`
+              : "N/A";
+            return { ...job, vehicleName };
+          } catch (err) {
+            console.error("Error fetching vehicle:", err);
+            return { ...job, vehicleName: "N/A" };
+          }
+        }
+        return { ...job, vehicleName: "N/A" };
+      })
+    );
+    setCompletedJobs(enrichedJobs);
+  });
+
+  return () => unsubscribe();
+}, []);
+
   // const handleAccept = async (request) => {
   //   const mechanic = auth.currentUser;
   //   if (!mechanic) return;
