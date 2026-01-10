@@ -38,7 +38,7 @@ const WelcomeScreen = () => {
         <Image
           source={require("@/assets/images/welcome.png")}
           style={styles.image}
-          resizeMode="stretch"
+          resizeMode="contain"
         />
       </View>
 
@@ -94,8 +94,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
-    width: 300,
-    height: 300,
+    width: 400,
+    height: 400,
   },
   textContainer: {
     alignItems: "center",

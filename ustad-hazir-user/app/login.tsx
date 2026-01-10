@@ -76,15 +76,15 @@ const Login = () => {
           contentContainerStyle={styles.container}
           keyboardShouldPersistTaps="handled"
         >
-            {/* <LanguageSelector /> */}
-      <View style={{ position: "absolute", top: 40, right: 10, zIndex: 1000 }}>
-        <LanguageSelector />
-      </View>
+          {/* <LanguageSelector /> */}
+          <View style={{ position: "absolute", top: 40, right: 10, zIndex: 1000 }}>
+            <LanguageSelector />
+          </View>
           <View style={styles.imageContainer}>
             <Image
               source={require("@/assets/images/welcome.png")}
               style={styles.image}
-              resizeMode="stretch"
+              resizeMode="contain"
             />
           </View>
 
@@ -168,8 +168,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
-    width: 300,
-    height: 300,
+    width: 400,
+    height: 400,
   },
   textContainer: {
     marginTop: 10,
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   },
   forgotText: {
     fontSize: 14,
-    color: "#5126ecff",
+    color: "#5075d9",
     fontWeight: "600",
   },
 });

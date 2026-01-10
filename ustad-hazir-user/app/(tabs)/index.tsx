@@ -1,9 +1,12 @@
+import { deleteVehicle } from "@/backend/vehicleService";
 import { auth, db } from "@/src/firebaseConfig";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
+  Alert,
   FlatList,
   Image,
   Pressable,
@@ -12,15 +15,16 @@ import {
   Text,
   View,
 } from "react-native";
+import LottieView from 'lottie-react-native';
 import Swiper from "react-native-swiper";
-import { useTranslation } from "react-i18next";
-import { I18nManager, Alert } from "react-native";
-import { deleteVehicle } from "@/backend/vehicleService";
 
 const banners = [
   {
     id: 1,
+
     image: require("@/assets/images/banners/tyre.jpg"),
+    // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
+
     text: "Tyre Replacement Service",
     discount: "20% OFF",
   },
@@ -42,7 +46,9 @@ export const carServices = [
     id: 1,
     categoryId: 1,
     title: "Oil Change",
-    image: require("@/assets/images/icons/oilChange.png"),
+    type: "lottie",
+    // image: require("@/assets/images/icons/oilChange.png"),
+    source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
   },
   {
     id: 2,
@@ -196,24 +202,51 @@ const HomeScreen = () => {
     ]);
   };
 
+  // const renderService = ({ item }) => (
+  //   <Pressable
+  //     style={styles.categoryCard}
+  //     key={item.id}
+  //     onPress={() =>
+  //       router.push(
+  //         `/listServices?serviceName=${encodeURIComponent(item.title)}`
+  //       )
+  //     }
+  //   >
+  //     <Image
+  //       source={item.source}
+  //       style={{ width: 50, height: 50, resizeMode: "contain" }}
+  //     />
+
+  //     <Text style={styles.categoryText}>{item.title}</Text>
+  //   </Pressable>
+  // );
+
   const renderService = ({ item }) => (
     <Pressable
       style={styles.categoryCard}
       key={item.id}
       onPress={() =>
-        router.push(
-          `/listServices?serviceName=${encodeURIComponent(item.title)}`
-        )
+        router.push(`/listServices?serviceName=${encodeURIComponent(item.title)}`)
       }
     >
-      <Image
-        source={item.image}
-        style={{ width: 50, height: 50, resizeMode: "contain" }}
-      />
+      {item.type === "image" ? (
+        <Image
+          source={item.source}
+          style={{ width: 50, height: 50, resizeMode: "contain" }}
+        />
+      ) : (
+        <LottieView
+          source={{ uri: item.source }}
+          style={{ width: 80, height: 80 }}
+          autoPlay
+          loop
+        />
+      )}
 
       <Text style={styles.categoryText}>{item.title}</Text>
     </Pressable>
   );
+
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -424,8 +457,8 @@ const HomeScreen = () => {
                       {vehicle
                         ? `${vehicle.brand} ${vehicle.model} (${vehicle.registration})`
                         : item.vehicleName
-                        ? `${item.vehicleName} ${item.vehicleModel} (${item.registration})`
-                        : "Unknown Vehicle"}
+                          ? `${item.vehicleName} ${item.vehicleModel} (${item.registration})`
+                          : "Unknown Vehicle"}
                     </Text>
                     <Text style={styles.serviceDate}>
                       Date:{" "}
@@ -597,7 +630,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: 20,
     width: "30%", // ✅ fits two per row with some spacing
-    marginBottom: 15,
+    // marginBottom: 0,
     elevation: 2,
     shadowColor: "#000",
     shadowOpacity: 0.1,

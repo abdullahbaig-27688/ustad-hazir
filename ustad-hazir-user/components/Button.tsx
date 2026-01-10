@@ -31,18 +31,18 @@ export default Button;
 const styles = StyleSheet.create({
   button: {
     paddingVertical: 14,
-    
+
     paddingHorizontal: 20,
     borderRadius: 12,
     alignItems: "center",
     marginBottom: 12,
   },
   primary: {
-    backgroundColor: "#5126ecff",
+    backgroundColor: "#507fd9",
   },
   secondary: {
     borderWidth: 1.5,
-    borderColor: "#5126ecff",
+    borderColor: "#5076d9",
     backgroundColor: "#fff",
   },
   pressed: {
@@ -57,6 +57,6 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   secondaryText: {
-    color: "#5126ecff",
+    color: "#507fd9",
   },
 });

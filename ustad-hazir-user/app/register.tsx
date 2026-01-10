@@ -112,7 +112,7 @@ const Register = () => {
       showsVerticalScrollIndicator={false}
     >
 
-        {/* <LanguageSelector /> */}
+      {/* <LanguageSelector /> */}
       <View style={{ position: "absolute", top: 40, right: 10, zIndex: 1000 }}>
         <LanguageSelector />
       </View>
@@ -120,7 +120,7 @@ const Register = () => {
         <Image
           source={require("@/assets/images/welcome.png")}
           style={styles.image}
-          resizeMode="stretch"
+          resizeMode="contain"
         />
       </View>
 
@@ -279,8 +279,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
-    width: 300,
-    height: 300,
+    width: 200,
+    height: 200,
   },
   textContainer: {
     alignItems: "center",
@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
   },
   forgotText: {
     fontSize: 14,
-    color: "#5126ecff",
+    color: "#5075d9",
     fontWeight: "600",
   },
 });
