@@ -128,7 +128,7 @@ const Login = () => {
               />
               <Text style={styles.rememberText}>{t("remember_me")}</Text>
             </Pressable>
-            <Pressable onPress={() => console.log("Forgot Password pressed")}>
+            <Pressable onPress={() => router.replace("/forgotpassword")}>
               <Text style={styles.forgotText}>{t("forgot_password")}</Text>
             </Pressable>
           </View>

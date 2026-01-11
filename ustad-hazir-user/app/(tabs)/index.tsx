@@ -15,7 +15,7 @@ import {
   Text,
   View,
 } from "react-native";
-import LottieView from 'lottie-react-native';
+
 import Swiper from "react-native-swiper";
 
 const banners = [
@@ -46,57 +46,84 @@ export const carServices = [
     id: 1,
     categoryId: 1,
     title: "Oil Change",
-    type: "lottie",
-    // image: require("@/assets/images/icons/oilChange.png"),
-    source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
+
+
+    image: require("@/assets/images/icons/oilChange.png"),
+    // type:"lottie",
+    // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
   },
   {
     id: 2,
     categoryId: 2,
     title: "Engine Repair",
+
     image: require("@/assets/images/icons/engineRepair.png"),
+    // type: "lottie",
+    // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
+
   },
   {
     id: 3,
     categoryId: 3,
     title: "Tyre Service",
     image: require("@/assets/images/icons/tyreService1.png"),
+    // type: "lottie",
+
+    // source: "https://lottie.host/c3214cf5-8883-41ea-a8f1-4f5e76d9b345/Zhh5uLDj0T.lottie",
   },
   {
     id: 4,
     categoryId: 4,
     title: "Battery Check",
     image: require("@/assets/images/icons/batteryCheck.png"),
+    // type: "lottie",
+
+    // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
   },
   {
     id: 5,
     categoryId: 5,
     title: "AC Service",
     image: require("@/assets/images/icons/acRepair.png"),
+    // type: "lottie",
+
+    // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
   },
   {
     id: 6,
     categoryId: 6,
     title: "Car Wash",
     image: require("@/assets/images/icons/carWash.png"),
+    // type: "lottie",
+
+    // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
   },
   {
     id: 7,
     categoryId: 7,
     title: "Car Inspection",
     image: require("@/assets/images/icons/carinspection.png"),
+    // type: "lottie",
+
+    // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
   },
   {
     id: 8,
     categoryId: 8,
     title: "Body Paint",
     image: require("@/assets/images/icons/carPaint.png"),
+    // type: "lottie",
+
+    // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
   },
   {
     id: 9,
     categoryId: 9,
     title: "Wheel Alignment",
     image: require("@/assets/images/icons/wheel.png"),
+    // type: "lottie",
+
+    // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
   },
 ];
 
@@ -202,50 +229,88 @@ const HomeScreen = () => {
     ]);
   };
 
-  // const renderService = ({ item }) => (
-  //   <Pressable
-  //     style={styles.categoryCard}
-  //     key={item.id}
-  //     onPress={() =>
-  //       router.push(
-  //         `/listServices?serviceName=${encodeURIComponent(item.title)}`
-  //       )
-  //     }
-  //   >
-  //     <Image
-  //       source={item.source}
-  //       style={{ width: 50, height: 50, resizeMode: "contain" }}
-  //     />
-
-  //     <Text style={styles.categoryText}>{item.title}</Text>
-  //   </Pressable>
-  // );
-
   const renderService = ({ item }) => (
     <Pressable
       style={styles.categoryCard}
       key={item.id}
       onPress={() =>
-        router.push(`/listServices?serviceName=${encodeURIComponent(item.title)}`)
+        router.push(
+          `/listServices?serviceName=${encodeURIComponent(item.title)}`
+        )
       }
     >
-      {item.type === "image" ? (
-        <Image
-          source={item.source}
-          style={{ width: 50, height: 50, resizeMode: "contain" }}
-        />
-      ) : (
-        <LottieView
-          source={{ uri: item.source }}
-          style={{ width: 80, height: 80 }}
-          autoPlay
-          loop
-        />
-      )}
+      <Image
+        source={item.image}
+        style={{ width: 50, height: 50, resizeMode: "contain" }}
+      />
 
       <Text style={styles.categoryText}>{item.title}</Text>
     </Pressable>
   );
+
+  // const ServiceItem = ({ item }) => {
+  //   const player = useVideoPlayer(
+  //     item.type === "video"
+  //       ? typeof item.source === "string"
+  //         ? { uri: item.source }
+  //         : item.source
+  //       : null,
+  //     (player) => {
+  //       if (player) {
+  //         player.loop = true;
+  //         player.muted = true;
+  //         player.play();
+  //       }
+  //     }
+  //   );
+
+  //   return (
+  //     <Pressable
+  //       style={
+  //         styles.categoryCard}
+
+
+  //       onPress={() =>
+  //         router.push(`/listServices?serviceName=${encodeURIComponent(item.title)}`)
+  //       }
+  //     >
+  //       {
+  //         item.type === "lottie" && (
+  //           <LottieView
+  //             source={{ uri: item.source }}
+  //             style={{ width: 80, height: 80 }}
+  //             autoPlay
+  //             loop
+  //           />
+  //         )
+  //       }
+
+  //       {
+  //         item.type === "video" && player && (
+  //           <VideoView
+  //             player={player}
+  //             style={{ width: 80, height: 80, backgroundColor: "transparent" }}
+  //             contentFit="contain"
+  //           />
+  //         )
+  //       }
+
+  //       {
+  //         item.type === "image" && (
+  //           <Image
+  //             source={item.source}
+  //             style={{ width: 50, height: 50, resizeMode: "contain" }}
+  //           />
+  //         )
+  //       }
+
+  //       <Text style={styles.categoryText}>{item.title}</Text>
+  //     </Pressable >
+  //   );
+  // };
+
+
+
 
 
   return (
@@ -321,14 +386,15 @@ const HomeScreen = () => {
         data={carServices}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderService}
-        numColumns={3} // ✅ two per row
+        numColumns={3}
         columnWrapperStyle={{
           justifyContent: "space-evenly",
           paddingHorizontal: 20,
           marginBottom: 15,
         }}
-        scrollEnabled={false} // keep it inside ScrollView
+        scrollEnabled={false}
       />
+
 
       {/* Vehicles Section */}
       <View style={styles.vehicleSection}>
@@ -336,7 +402,7 @@ const HomeScreen = () => {
           <Text style={styles.serviceTitle}>{t("my_vehicle_history")}</Text>
           {vehicles.length > 0 && (
             <Pressable onPress={() => router.push("/allVehicles")}>
-              <Text style={styles.addVehicleText}>{t("add_vehicle")}</Text>
+              <Text style={styles.addVehicleText}>{t("view_all")}</Text>
             </Pressable>
           )}
         </View>
@@ -410,7 +476,7 @@ const HomeScreen = () => {
           <Text style={styles.serviceTitle}>{t("my_request_history")}</Text>
           {requests.length > 0 && (
             <Pressable onPress={() => router.push("/allRequests")}>
-              <Text style={styles.addVehicleText}>{t("request_service")}</Text>
+              <Text style={styles.addVehicleText}>{t("view_all")}</Text>
             </Pressable>
           )}
         </View>
@@ -421,7 +487,7 @@ const HomeScreen = () => {
               onPress={() => router.push("/(tabs)/requestservice")}
               style={styles.addVehicleCard}
             >
-              <Ionicons name="add-circle-outline" size={40} color="#0D47A1" />
+              <Ionicons name="add-circle-outline" size={40} color="#5075d9" />
               <Text style={styles.addVehicleText}>{t("request_service")}</Text>
             </Pressable>
           </View>
@@ -612,7 +678,7 @@ const styles = StyleSheet.create({
   // categoryCard: {
   //   alignItems: "center",
   //   justifyContent: "center",
-  //   // backgroundColor: "#4A90E2",
+  // backgroundColor: "#4A90E2",
   //   backgroundColor: "#fff",
   //   borderRadius: 12,
   //   paddingVertical:20,

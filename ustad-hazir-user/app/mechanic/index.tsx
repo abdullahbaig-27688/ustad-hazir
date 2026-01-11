@@ -1,27 +1,27 @@
-import { auth, db } from "@/src/firebaseConfig";
-import { createChatIfNotExists } from "@/utils/createChat";
-import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import { doc, getDoc } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
-import {
-  ScrollView,
-  FlatList,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  ActivityIndicator,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { getSingleVehicle } from "@/backend/vehicleService";
 import {
   listenToAllServices,
   listenToCompletedJobs,
   listenToCustomerRequests,
   updateRequestStatus,
 } from "@/backend/machenicService";
+import { getSingleVehicle } from "@/backend/vehicleService";
+import { auth, db } from "@/src/firebaseConfig";
+import { createChatIfNotExists } from "@/utils/createChat";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { doc, getDoc } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const HomeScreen = () => {
   const { t } = useTranslation();
@@ -98,32 +98,32 @@ const HomeScreen = () => {
 
   // Listen for completed jobs
   useEffect(() => {
-  const mechanic = auth.currentUser;
-  if (!mechanic) return;
+    const mechanic = auth.currentUser;
+    if (!mechanic) return;
 
-  const unsubscribe = listenToCompletedJobs(mechanic.uid, async (jobs) => {
-    const enrichedJobs = await Promise.all(
-      jobs.map(async (job) => {
-        if (job.vehicleId) {
-          try {
-            const vehicle = await getSingleVehicle(job.vehicleId);
-            const vehicleName = vehicle
-              ? `${vehicle.brand} ${vehicle.model} (${vehicle.year}) - ${vehicle.color}`
-              : "N/A";
-            return { ...job, vehicleName };
-          } catch (err) {
-            console.error("Error fetching vehicle:", err);
-            return { ...job, vehicleName: "N/A" };
+    const unsubscribe = listenToCompletedJobs(mechanic.uid, async (jobs) => {
+      const enrichedJobs = await Promise.all(
+        jobs.map(async (job) => {
+          if (job.vehicleId) {
+            try {
+              const vehicle = await getSingleVehicle(job.vehicleId);
+              const vehicleName = vehicle
+                ? `${vehicle.brand} ${vehicle.model} (${vehicle.year}) - ${vehicle.color}`
+                : "N/A";
+              return { ...job, vehicleName };
+            } catch (err) {
+              console.error("Error fetching vehicle:", err);
+              return { ...job, vehicleName: "N/A" };
+            }
           }
-        }
-        return { ...job, vehicleName: "N/A" };
-      })
-    );
-    setCompletedJobs(enrichedJobs);
-  });
+          return { ...job, vehicleName: "N/A" };
+        })
+      );
+      setCompletedJobs(enrichedJobs);
+    });
 
-  return () => unsubscribe();
-}, []);
+    return () => unsubscribe();
+  }, []);
 
   // const handleAccept = async (request) => {
   //   const mechanic = auth.currentUser;
@@ -317,8 +317,8 @@ const HomeScreen = () => {
                 <Text style={styles.jobTime}>
                   {activeJob.createdAt
                     ? new Date(
-                        activeJob.createdAt.seconds * 1000
-                      ).toLocaleString()
+                      activeJob.createdAt.seconds * 1000
+                    ).toLocaleString()
                     : "Pending"}
                 </Text>
                 <View style={{ flexDirection: "row", marginTop: 15 }}>

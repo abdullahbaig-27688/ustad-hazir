@@ -1,28 +1,28 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TextInput,
-  Pressable,
-  Alert,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
-  BackHandler,
-} from "react-native";
-import { auth, storage, db } from "@/src/firebaseConfig";
-import { router } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { doc, updateDoc, getDoc } from "firebase/firestore";
 import Button from "@/components/Button";
 import ProfileHeader from "@/components/Header";
+import { auth, db, storage } from "@/src/firebaseConfig";
+import { Ionicons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import { router } from "expo-router";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import {
+  Alert,
+  BackHandler,
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 const languages = [
   {
     code: "en",
@@ -303,6 +303,7 @@ const styles = StyleSheet.create({
   },
   inputSection: {
     marginBottom: 30,
+    width: "80%",
   },
   inputLabel: {
     fontSize: 14,

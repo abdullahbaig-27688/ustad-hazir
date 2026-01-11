@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 40,
 
-    backgroundColor: "#5126ecff",
+    backgroundColor: "#5075d9",
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
     elevation: 3,

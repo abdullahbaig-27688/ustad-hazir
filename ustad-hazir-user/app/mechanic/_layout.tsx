@@ -19,7 +19,7 @@ export default function TabLayout() {
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarStyle: {
-          backgroundColor: "#5126ecff", // clean white
+          backgroundColor: "#5075d9", // clean white
           borderTopWidth: 1,
           height: 80,
           padding: 20,
@@ -114,7 +114,7 @@ export default function TabLayout() {
           ),
         }}
       />
-       
+
     </Tabs>
   );
 }

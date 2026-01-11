@@ -18,7 +18,7 @@ export default function TabLayout() {
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarStyle: {
-          backgroundColor: "#5126ecff", // clean white
+          backgroundColor: "#5075d9", // clean white
           borderTopWidth: 1,
           height: 80,
           padding: 20,
@@ -95,7 +95,7 @@ export default function TabLayout() {
         name="inbox"
         options={{
           title: "Chats",
-          href:null
+          href: null
           // tabBarIcon: ({ color }) => (
           //   <Ionicons name="chatbubble-outline" size={28} color={color} />
           // ),

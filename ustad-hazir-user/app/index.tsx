@@ -29,7 +29,7 @@ const SplashScreen = () => {
     // Navigate to welcome screen after 3 seconds
     const timer = setTimeout(() => {
       router.replace("/welcome"); // Replace with your route
-    }, 4000);
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, [fadeAnim, router]);
@@ -45,10 +45,10 @@ const SplashScreen = () => {
           />
         </View>
         <View style={styles.textContainer}>
-       <Text style={styles.appName}>Ustad Hazir</Text>
-        <Text style={styles.tagline}> Fast, trusted roadside help at your fingertips.</Text>
+          <Text style={styles.appName}>Ustad Hazir</Text>
+          <Text style={styles.tagline}> Fast, trusted roadside help at your fingertips.</Text>
         </View>
- 
+
       </Animated.View>
       <ActivityIndicator
         size="large"
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logoContainer: {
-    width: 120,
+    width: 1200,
     height: 120,
     borderRadius: 60,
     // backgroundColor: "white",
@@ -78,9 +78,9 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   logo: {
-     width: "100%",     // take full width of container
-  height: "100%",    // take full height of container
-  // borderRadius: 60,  // optional
+    width: "100%",     // take full width of container
+    height: "100%",    // take full height of container
+    // borderRadius: 60,  // optional
     // width: 200,
     // height: 300,
     // fontSize: 48,
@@ -97,9 +97,9 @@ const styles = StyleSheet.create({
     color: "white",
     marginTop: 8,
   },
-   textContainer: {
+  textContainer: {
     alignItems: "center",
-    paddingTop:40,
+    paddingTop: 40,
     marginBottom: 20,
   },
 });
