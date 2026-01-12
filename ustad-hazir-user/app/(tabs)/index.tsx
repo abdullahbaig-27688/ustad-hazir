@@ -3,6 +3,7 @@ import { auth, db } from "@/src/firebaseConfig";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
+import LottieView from "lottie-react-native";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -15,6 +16,7 @@ import {
   Text,
   View,
 } from "react-native";
+
 
 import Swiper from "react-native-swiper";
 
@@ -46,84 +48,88 @@ export const carServices = [
     id: 1,
     categoryId: 1,
     title: "Oil Change",
-
-
-    image: require("@/assets/images/icons/oilChange.png"),
-    // type:"lottie",
-    // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
+    // image: require("@/assets/images/icons/oilChange.png"),
+    type: "lottie",
+    source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
   },
   {
     id: 2,
     categoryId: 2,
     title: "Engine Repair",
 
-    image: require("@/assets/images/icons/engineRepair.png"),
-    // type: "lottie",
-    // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
+    // image: require("@/assets/images/icons/engineRepair.png"),
+    type: "lottie",
+    source: "https://lottie.host/0c857c99-602d-46d3-abf8-1c00c5426d60/YPf39xfs11.lottie",
+
 
   },
   {
     id: 3,
     categoryId: 3,
     title: "Tyre Service",
-    image: require("@/assets/images/icons/tyreService1.png"),
-    // type: "lottie",
+    // image: require("@/assets/images/icons/tyreService1.png"),
+    type: "lottie",
+    source: "https://lottie.host/48480c40-3a1c-4e4f-a361-1b0f5bc4a7aa/VO6wgM8S1J.lottie",
 
-    // source: "https://lottie.host/c3214cf5-8883-41ea-a8f1-4f5e76d9b345/Zhh5uLDj0T.lottie",
+
   },
   {
     id: 4,
     categoryId: 4,
     title: "Battery Check",
-    image: require("@/assets/images/icons/batteryCheck.png"),
-    // type: "lottie",
+    // image: require("@/assets/images/icons/batteryCheck.png"),
+    type: "lottie",
+    source: "https://lottie.host/781a2ed0-ffb7-49b4-a61c-f5954487fb9d/LFS9VPRu1s.lottie",
 
-    // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
+
   },
   {
     id: 5,
     categoryId: 5,
     title: "AC Service",
-    image: require("@/assets/images/icons/acRepair.png"),
-    // type: "lottie",
+    // image: require("@/assets/images/icons/acRepair.png"),
+    type: "lottie",
 
-    // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
+    source: "https://lottie.host/4f1be215-4463-43e8-8b94-6f2bdcaad671/xZknJpirwm.lottie"
   },
   {
     id: 6,
     categoryId: 6,
-    title: "Car Wash",
-    image: require("@/assets/images/icons/carWash.png"),
-    // type: "lottie",
+    title: "Fuel Delivery",
+    // image: require("@/assets/images/icons/carWash.png"),
+    type: "lottie",
 
-    // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
+    source: "https://lottie.host/629466fa-8538-40a8-8dd3-e8e74c17d445/pTL5PghZBB.lottie",
   },
   {
     id: 7,
     categoryId: 7,
     title: "Car Inspection",
-    image: require("@/assets/images/icons/carinspection.png"),
-    // type: "lottie",
+    // image: require("@/assets/images/icons/carinspection.png"),
+    type: "lottie",
+    source: "https://lottie.host/926b8e0e-b2fb-4018-a873-a120fc918e89/5lTlq3iT7R.lottie"
 
     // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
   },
   {
     id: 8,
     categoryId: 8,
-    title: "Body Paint",
-    image: require("@/assets/images/icons/carPaint.png"),
-    // type: "lottie",
+    title: "Car Towing",
+    // image: require("@/assets/images/icons/carPaint.png"),
+    type: "lottie",
+    source: "https://lottie.host/b38d1c08-f174-47e3-8cfd-574480b89990/Mm0EOlTdfs.lottie"
 
-    // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
+
   },
   {
     id: 9,
     categoryId: 9,
-    title: "Wheel Alignment",
-    image: require("@/assets/images/icons/wheel.png"),
-    // type: "lottie",
+    title: "Electrical Repair",
+    // image: require("@/assets/images/icons/wheel.png"),
+    type: "lottie",
+    source: "https://lottie.host/ca3c6cae-54d7-47cb-8c51-5cdc48606138/WfnCzcHYx1.lottie"
 
-    // source: "https://lottie.host/24c6b740-0736-45dc-9304-3dbda0a09bbe/llTiJDewna.lottie",
+
   },
 ];
 
@@ -229,20 +235,48 @@ const HomeScreen = () => {
     ]);
   };
 
+  // const renderService = ({ item }) => (
+  //   <Pressable
+  //     style={styles.categoryCard}
+  //     key={item.id}
+  //     onPress={() =>
+  //       router.push(
+  //         `/listServices?serviceName=${encodeURIComponent(item.title)}`
+  //       )
+  //     }
+  //   >
+  //     <Image
+  //       source={item.source}
+  //       style={{ width: 50, height: 50, resizeMode: "contain" }}
+  //     />
+
+  //     <Text style={styles.categoryText}>{item.title}</Text>
+  //   </Pressable>
+  // );
+
   const renderService = ({ item }) => (
     <Pressable
       style={styles.categoryCard}
-      key={item.id}
       onPress={() =>
         router.push(
           `/listServices?serviceName=${encodeURIComponent(item.title)}`
         )
       }
     >
-      <Image
-        source={item.image}
-        style={{ width: 50, height: 50, resizeMode: "contain" }}
-      />
+      {item.type === "lottie" ? (
+        <LottieView
+          source={{ uri: item.source }}
+          style={{ width: 70, height: 70 }}
+          autoPlay
+          loop
+          resizeMode="contain"
+        />
+      ) : (
+        <Image
+          source={item.source}
+          style={{ width: 50, height: 50, resizeMode: "contain" }}
+        />
+      )}
 
       <Text style={styles.categoryText}>{item.title}</Text>
     </Pressable>
