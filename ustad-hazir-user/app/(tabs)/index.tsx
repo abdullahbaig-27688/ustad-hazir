@@ -66,7 +66,7 @@ export const carServices = [
   {
     id: 3,
     categoryId: 3,
-    title: "Tyre Service",
+    title: "Tyre Repair",
     // image: require("@/assets/images/icons/tyreService1.png"),
     type: "lottie",
     source: "https://lottie.host/48480c40-3a1c-4e4f-a361-1b0f5bc4a7aa/VO6wgM8S1J.lottie",
@@ -86,7 +86,7 @@ export const carServices = [
   {
     id: 5,
     categoryId: 5,
-    title: "AC Service",
+    title: "AC Repair",
     // image: require("@/assets/images/icons/acRepair.png"),
     type: "lottie",
 

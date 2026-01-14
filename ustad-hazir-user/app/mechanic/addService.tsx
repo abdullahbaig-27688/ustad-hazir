@@ -1,22 +1,21 @@
-import React, { useState } from "react";
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  Alert,
-  Pressable,
-  Text,
-  Platform,
-} from "react-native";
-import { useTranslation } from "react-i18next";
+import { addService } from "@/backend/machenicService";
+import AddServiceButton from "@/components/Button";
 import AddServiceHeader from "@/components/Header";
 import InputField from "@/components/InputField";
-import AddServiceButton from "@/components/Button";
-import { addService } from "@/backend/machenicService";
-import { router } from "expo-router";
-import * as Location from "expo-location";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Picker } from "@react-native-picker/picker";
+import * as Location from "expo-location";
+import { router } from "expo-router";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  Alert,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 const ServicePricing = () => {
   const { t } = useTranslation();
@@ -92,7 +91,7 @@ const ServicePricing = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <AddServiceHeader title={t("addService")} showBack />
       <ScrollView contentContainerStyle={styles.content}>
         {/* Service Type */}
@@ -103,16 +102,17 @@ const ServicePricing = () => {
             onValueChange={(val) => setServiceName(val)}
             style={styles.picker}
           >
-            <Picker.Item label={t("selectServiceType")} value="" />
-            <Picker.Item label={t("oilChange")} value="oil_change" />
-            <Picker.Item label={t("engineRepair")} value="engine_repair" />
-            <Picker.Item label={t("tyreRepair")} value="tyre_repair" />
-            <Picker.Item label={t("batteryCheck")} value="battery_check" />
-            <Picker.Item label={t("acService")} value="ac_service" />
-            <Picker.Item label={t("carWash")} value="car_wash" />
-            <Picker.Item label={t("carInspection")} value="car_inspection" />
-            <Picker.Item label={t("bodyPaint")} value="body_paint" />
-            <Picker.Item label={t("wheelAlignment")} value="wheel_alignment" />
+            <Picker.Item label={t("Select Service Type")} value="" />
+            <Picker.Item label={t("Oil Change")} value="Oil Change" />
+            <Picker.Item label={t("Engine Repair")} value="Engine Repair" />
+            <Picker.Item label={t("Tyre Repair")} value="Tyre Repair" />
+            <Picker.Item label={t("Battery Check")} value="Battery Check" />
+            <Picker.Item label={t("AC Repair")} value="AC Repair" />
+            <Picker.Item label={t("Fuel Delivery")} value="Fuel Delivery" />
+            <Picker.Item label={t("Car Inspection")} value="Car Inspection" />
+            <Picker.Item label={t("Car Towing ")} value="Car Towing" />
+            <Picker.Item label={t("Electrical Repair")} value="Electrical Repair" />
+            <Picker.Item label={t("other")} value="other" />
           </Picker>
         </View>
 
@@ -169,12 +169,11 @@ const ServicePricing = () => {
           <Pressable style={styles.locationButton} onPress={getCurrentLocation}>
             <Text>
               {location
-                ? `${location.address ? location.address + ", " : ""}${
-                    location.city || ""
-                  }`
+                ? `${location.address ? location.address + ", " : ""}${location.city || ""
+                }`
                 : locationLoading
-                ? t("fetching")
-                : t("getLocation")}
+                  ? t("fetching")
+                  : t("getLocation")}
             </Text>
           </Pressable>
         </View>
@@ -185,7 +184,7 @@ const ServicePricing = () => {
           onPress={handleAddService}
         />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

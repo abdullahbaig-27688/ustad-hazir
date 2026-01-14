@@ -53,7 +53,7 @@ const CompletedJobHistory = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <JobHistory title="Completed Job" showBack />
       <FlatList
         data={jobs}
@@ -82,7 +82,7 @@ const CompletedJobHistory = () => {
           </View>
         )}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

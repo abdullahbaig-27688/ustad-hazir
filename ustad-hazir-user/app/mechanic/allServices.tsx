@@ -1,20 +1,18 @@
+import { deleteService, getAllServices } from "@/backend/machenicService";
+import Button from "@/components/Button";
+import AllServiceHeader from "@/components/Header";
+import { Ionicons } from "@expo/vector-icons";
+import { router, useFocusEffect } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  View,
-  Text,
+  ActivityIndicator,
+  Alert,
+  RefreshControl,
   ScrollView,
   StyleSheet,
-  ActivityIndicator,
-  RefreshControl,
-  Pressable,
-  Alert,
+  Text,
+  View
 } from "react-native";
-import Button from "@/components/Button";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
-import AllServiceHeader from "@/components/Header";
-import { router, useFocusEffect } from "expo-router";
-import { getAllServices, deleteService } from "@/backend/machenicService";
 
 // 🟦 TRANSLATION
 import { useTranslation } from "react-i18next";
@@ -70,7 +68,7 @@ const AllServices = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <AllServiceHeader
         title={t("service_history")}
         showBack
@@ -154,7 +152,7 @@ const AllServices = () => {
           )}
         </ScrollView>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 

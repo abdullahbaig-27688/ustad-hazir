@@ -1,15 +1,15 @@
-import React, { useEffect, useRef } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Animated,
-  Dimensions,
-  ActivityIndicator,
-  Image,
-} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import React, { useEffect, useRef } from "react";
+import {
+  ActivityIndicator,
+  Animated,
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
@@ -39,7 +39,7 @@ const SplashScreen = () => {
       <Animated.View style={{ opacity: fadeAnim, alignItems: "center" }}>
         <View style={styles.logoContainer}>
           <Image
-            source={require("@/assets/images/welcome.png")} // replace with your illustration image
+            source={require("@/assets/images/welcome1.png")} // replace with your illustration image
             style={styles.logo}
             resizeMode="contain"
           />
@@ -78,8 +78,8 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   logo: {
-    width: "100%",     // take full width of container
-    height: "100%",    // take full height of container
+    width: "200%",     // take full width of container
+    height: "200%",    // take full height of container
     // borderRadius: 60,  // optional
     // width: 200,
     // height: 300,

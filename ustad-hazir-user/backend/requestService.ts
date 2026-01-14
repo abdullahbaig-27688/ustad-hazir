@@ -140,7 +140,9 @@ const addQuickServiceRequest = async (service: any) => {
 
     const customerName = userData.name || "Anonymous";
     // Use the mechanic ID from the selected service
-    const mechanicId = service.machenicId; // ✅ assign mechanic automatically
+    const mechanicId = service.mechanicId; // ✅ correct
+    if (!mechanicId) throw new Error("Mechanic ID is missing");
+
 
     const docRef = doc(serviceRequestRef);
 
@@ -173,11 +175,8 @@ const deleteServiceRequest = async (id: string) => {
 };
 
 export {
-  addServiceRequest,
-  fetchVehicleDetails,
-  addQuickServiceRequest,
-  deleteServiceRequest,
-  getSingleServiceRequest,
+  addQuickServiceRequest, addServiceRequest, deleteServiceRequest, fetchVehicleDetails, getSingleServiceRequest,
   getUserServiceRequests,
-  updateServiceRequest,
+  updateServiceRequest
 };
+

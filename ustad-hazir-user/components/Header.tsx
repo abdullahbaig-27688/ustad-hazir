@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import React from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 type ButtonProps = {
   title: string;
   rightIcon: string;
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 15,
-    paddingVertical: 40,
+    paddingVertical: 50,
 
     backgroundColor: "#5075d9",
     borderBottomLeftRadius: 50,

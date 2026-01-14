@@ -1,14 +1,14 @@
+import { addServiceRequest } from "@/backend/requestService";
 import Button from "@/components/Button";
 import Header from "@/components/Header";
 import InputField from "@/components/InputField";
 import { auth, db } from "@/src/firebaseConfig";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
+import * as Location from "expo-location";
 import { router } from "expo-router";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { addServiceRequest } from "@/backend/requestService";
 import React, { useEffect, useState } from "react";
-import * as Location from "expo-location";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -19,8 +19,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  View,
+  View
 } from "react-native";
 
 const CreateServiceRequestScreen = () => {
@@ -166,11 +165,18 @@ const CreateServiceRequestScreen = () => {
             onValueChange={(val) => setServiceType(val)}
             style={styles.picker}
           >
-            <Picker.Item label={t("select_service_type")} value="" />
-            <Picker.Item label={t("oil_change")} value="oil_change" />
-            <Picker.Item label={t("brake_repair")} value="brake_repair" />
-            <Picker.Item label={t("battery_check")} value="battery_check" />
-            <Picker.Item label={t("tire_service")} value="tire_service" />
+            <Picker.Item label={t("Select Service Type")} value="" />
+            <Picker.Item label={t("Oil Change")} value="Oil Change" />
+            <Picker.Item label={t("Engine Repair")} value="Engine Repair" />
+            <Picker.Item label={t("Tyre Repair")} value="Tyre Repair" />
+            <Picker.Item label={t("Battery Check")} value="Battery Check" />
+            <Picker.Item label={t("AC Repair")} value="AC Repair" />
+            <Picker.Item label={t("Fuel Delivery")} value="Fuel Delivery" />
+            <Picker.Item label={t("Car Inspection")} value="Car Inspection" />
+            <Picker.Item label={t("Car Towing ")} value="Car Towing" />
+            <Picker.Item label={t("Electrical Repair")} value="Electrical Repair" />
+
+
             <Picker.Item label={t("other")} value="other" />
           </Picker>
         </View>
@@ -218,8 +224,8 @@ const CreateServiceRequestScreen = () => {
             <Text style={{ color: "#fff" }}>
               {currentLocation
                 ? `${t("location_set")} (${currentLocation.latitude.toFixed(
-                    4
-                  )}, ${currentLocation.longitude.toFixed(4)})`
+                  4
+                )}, ${currentLocation.longitude.toFixed(4)})`
                 : t("use_current_location")}
             </Text>
           </Pressable>
@@ -241,6 +247,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    // paddingVertical: 40
+
   },
   contentContainer: {
     padding: 20,
@@ -295,7 +303,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   locationButton: {
-    backgroundColor: "#5126ecff",
+    backgroundColor: "#5075d9",
     padding: 12,
     borderRadius: 10,
     alignItems: "center",

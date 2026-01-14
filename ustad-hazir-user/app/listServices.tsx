@@ -1,18 +1,18 @@
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  Pressable,
   ActivityIndicator,
   Alert,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
-import ListHeader from "@/components/Header";
 import { getServicesByName } from "@/backend/machenicService";
 import { addQuickServiceRequest } from "@/backend/requestService";
+import ListHeader from "@/components/Header";
 
 const ListServices = () => {
   const { serviceName } = useLocalSearchParams();

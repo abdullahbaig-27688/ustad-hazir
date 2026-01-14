@@ -1,15 +1,15 @@
-import { db, auth } from "@/src/firebaseConfig";
+import { auth, db } from "@/src/firebaseConfig";
 import {
   collection,
-  getDocs,
+  deleteDoc,
   doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
   query,
-  where,
   setDoc,
   updateDoc,
-  onSnapshot,
-  deleteDoc,
-  getDoc,
+  where,
 } from "firebase/firestore";
 const usersCollectionRef = collection(db, "users");
 const serviceCollectionRef = collection(db, "machenicServices");
@@ -24,7 +24,7 @@ const addService = async (serviceData: any) => {
     const docRef = doc(serviceCollectionRef);
     await setDoc(docRef, {
       id: docRef.id,
-      machenicId: currentUser.uid,
+      mechanicId: currentUser.uid,
       serviceName: serviceData.serviceName,
       description: serviceData.description || "",
       price: serviceData.price,
@@ -58,7 +58,7 @@ const getAllServices = async () => {
 
     const q = query(
       serviceCollectionRef,
-      where("machenicId", "==", currentUser.uid)
+      where("mechanicId", "==", currentUser.uid)
     );
     const snapshot = await getDocs(q);
     return snapshot.docs.map((doc) => doc.data());
@@ -122,12 +122,12 @@ const listenToAllServices = (callback: (data: any[]) => void) => {
   const currentUser = auth.currentUser;
   if (!currentUser) {
     console.warn("User not logged in");
-    return () => {};
+    return () => { };
   }
 
   const q = query(
     serviceCollectionRef,
-    where("machenicId", "==", currentUser.uid)
+    where("mechanicId", "==", currentUser.uid)
   );
 
   const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -238,18 +238,19 @@ const deleteService = async (id: string) => {
 const getServicesByName = async (serviceName: string) => {
   try {
     // Convert to lowercase and replace space with _ to match DB
-    const formattedName = serviceName.toLowerCase().replace(" ", "_");
+    // const formattedName = serviceName.toLowerCase().replace(" ", "_");
 
     const q = query(
       serviceCollectionRef,
-      where("serviceName", "==", formattedName)
+      where("serviceName", "==", serviceName)
     );
     const snapshot = await getDocs(q);
 
     const services = await Promise.all(
       snapshot.docs.map(async (docSnap) => {
         const serviceData = docSnap.data();
-        const mechanicId = serviceData.machenicId;
+        const mechanicId = serviceData.mechanicId;
+
 
         let mechanicName = "";
         let mechanicContact = "";
@@ -266,6 +267,7 @@ const getServicesByName = async (serviceName: string) => {
         // Return the final service object
         return {
           id: docSnap.id,
+          mechanicId,
           name: mechanicName, // mechanic's name
           contact: mechanicContact, // mechanic's contact
           workshopName: workshopName,
@@ -281,14 +283,8 @@ const getServicesByName = async (serviceName: string) => {
   }
 };
 export {
-  addService,
-  getAllServices,
-  getSingleService,
-  listenToAllServices,
-  listenToCustomerRequests,
-  listenToCompletedJobs,
-  updateRequestStatus,
-  updateService,
-  deleteService,
-  getServicesByName,
+  addService, deleteService, getAllServices, getServicesByName, getSingleService,
+  listenToAllServices, listenToCompletedJobs, listenToCustomerRequests, updateRequestStatus,
+  updateService
 };
+
