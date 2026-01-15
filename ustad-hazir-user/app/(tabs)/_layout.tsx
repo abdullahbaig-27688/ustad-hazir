@@ -127,6 +127,16 @@ export default function TabLayout() {
           // ),
         }}
       />
+      <Tabs.Screen
+        name="AIchatBox"
+        options={{
+          title: "Notifications",
+          // href: null,
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="notifications-outline" size={28} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
