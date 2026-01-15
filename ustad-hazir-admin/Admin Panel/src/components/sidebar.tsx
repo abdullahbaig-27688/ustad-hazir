@@ -18,6 +18,8 @@ const Sidebar = ({ handleLogout }) => {
         <button onClick={() => navigate("/completed-jobs-module")}>📩 Completed Jobs</button>
         <button onClick={() => navigate("/accepted-jobs-module")}>✅ Accepted Jobs</button>
         <button onClick={() => navigate("/pending-jobs-module")}>🕒 Pending Jobs</button>
+        <button onClick={() => navigate("/notification-module")}>🔔 Notification</button>
+
         <button onClick={() => navigate("/settings")}>⚙️ Settings</button>
       </nav>
 

@@ -350,18 +350,27 @@ const HomeScreen = () => {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Greeting */}
-
       <View style={styles.greetingContainer}>
-        <Text style={styles.greeting}>
-          {t("hello")},{" "}
-          <Text style={styles.greetingName}>
-            {currentUserData.name || t("user")}
-          </Text>{" "}
-          👋
-        </Text>
+        <View style={styles.greetingRow}>
+          <View>
+            <Text style={styles.greeting}>
+              {t("hello")},{" "}
+              <Text style={styles.greetingName}>
+                {currentUserData.name || t("user")}
+              </Text>{" "}
+              👋
+            </Text>
 
-        <Text style={styles.subText}>{t("trusted_mechanic_ready")}</Text>
+            <Text style={styles.subText}>{t("trusted_mechanic_ready")}</Text>
+          </View>
+
+          {/* 🔔 Notification Icon */}
+          <Pressable onPress={() => router.push("/(tabs)/notifaction")}>
+            <Ionicons name="notifications-outline" size={26} color="#0D47A1" />
+          </Pressable>
+        </View>
       </View>
+
 
       {/* Banner */}
       <View style={styles.bannerContainer}>
@@ -616,6 +625,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
+  greetingRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
   greeting: {
     fontSize: 22,
     fontWeight: "700",

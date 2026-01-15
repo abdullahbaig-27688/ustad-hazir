@@ -1,125 +1,134 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Pressable,
-  SafeAreaView,
-} from "react-native";
+import { mechanicNotifications } from "@/backend/notificationService";
+import Header from "@/components/Header";
 import { Ionicons } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View
+} from "react-native";
 
-const dummyNotifications = [
-  {
-    id: "1",
-    type: "job",
-    title: "New Job Request: Car Repair",
-    time: "10:30 AM",
-  },
-  {
-    id: "2",
-    type: "payment",
-    title: "Payment Received: $50 from Ali Khan",
-    time: "09:15 AM",
-  },
-  {
-    id: "3",
-    type: "job",
-    title: "Customer Cancelled Job: Bike Service",
-    time: "Yesterday",
-  },
-  {
-    id: "4",
-    type: "alert",
-    title: "System Maintenance Tonight at 10 PM",
-    time: "2 days ago",
-  },
-];
+type Notification = {
+  id: string;
+  title: string;
+  message: string;
+  sendTo: string;
+  createdAt: any; // Firestore timestamp
+};
 
-const NotificationsScreen = ({ navigation }) => {
-  const [notifications, setNotifications] = useState(dummyNotifications);
+const NotificationScreen = () => {
+  const { t } = useTranslation();
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const renderItem = ({ item }) => {
-    let icon, color;
-    switch (item.type) {
-      case "job":
-        icon = "briefcase-outline";
-        color = "#2196F3";
-        break;
-      case "payment":
-        icon = "cash-outline";
-        color = "#4CAF50";
-        break;
-      case "alert":
-        icon = "alert-circle-outline";
-        color = "#FFA500";
-        break;
-      default:
-        icon = "notifications-outline";
-        color = "#555";
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  const fetchNotifications = async () => {
+    try {
+      const mechNotifs = await mechanicNotifications();
+
+      // Sort descending by createdAt
+      const sorted = mechNotifs.sort(
+        (a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)
+      );
+
+      setNotifications(sorted);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const renderItem = ({ item }: { item: Notification }) => {
+    const time = item.createdAt?.toDate
+      ? item.createdAt.toDate().toLocaleString()
+      : "";
 
     return (
-      <Pressable
-        style={styles.notificationCard}
-        onPress={() => alert(item.title)}
-      >
-        <Ionicons name={icon} size={28} color={color} style={{ marginRight: 12 }} />
-        <View style={{ flex: 1 }}>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.time}>{item.time}</Text>
+      <View style={styles.card}>
+        <Ionicons name="notifications" size={22} color="#0D47A1" />
+        <View style={styles.textWrapper}>
+          {/* Use i18n translation for title & message */}
+          <Text style={styles.title}>{t(item.title)}</Text>
+          <Text style={styles.message}>{t(item.message)}</Text>
+          <Text style={styles.time}>{time}</Text>
         </View>
-      </Pressable>
+      </View>
     );
   };
 
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>Notifications</Text>
-      <FlatList
-        data={notifications}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 20 }}
-      />
-    </SafeAreaView>
+    <View style={styles.container}>
+      <Header title={t("notifications")} showBack={true} />
+
+      {loading ? (
+        <ActivityIndicator size="large" color="#0D47A1" style={{ marginTop: 20 }} />
+      ) : notifications.length === 0 ? (
+        <View style={styles.emptyBox}>
+          <Ionicons name="notifications-off" size={60} color="#aaa" />
+          <Text style={styles.emptyText}>{t("no_notifications")}</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={notifications}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={{ padding: 16 }}
+        />
+      )}
+    </View>
   );
 };
 
-export default NotificationsScreen;
+export default NotificationScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
-    padding: 16,
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
-  notificationCard: {
-    flexDirection: "row",
-    alignItems: "center",
     backgroundColor: "#fff",
-    padding: 16,
+  },
+  card: {
+    flexDirection: "row",
+    backgroundColor: "#F5F7FA",
+    padding: 14,
     borderRadius: 12,
     marginBottom: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 1 },
-    shadowRadius: 2,
-    elevation: 2,
+    alignItems: "flex-start",
+    gap: 12,
+  },
+  textWrapper: {
+    flex: 1,
   },
   title: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "700",
+    color: "#0D47A1",
+  },
+  message: {
+    fontSize: 14,
+    color: "#333",
+    marginTop: 4,
   },
   time: {
     fontSize: 12,
-    color: "#555",
-    marginTop: 2,
+    color: "#777",
+    marginTop: 6,
+  },
+  emptyBox: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#777",
   },
 });

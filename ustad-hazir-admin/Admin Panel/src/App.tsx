@@ -9,6 +9,7 @@ import MechanicDetails from "./pages/mechanic-detail-module/mechanicDetail";
 import CompletedJobs from "./pages/completed-jobs-module/completedJobs";
 import AcceptedJobs from "./pages/accepted-jobs-module/acceptedJobs";
 import PendingJobs from "./pages/pending-jobs-module/pendingJobs";
+import Notification from "./pages/notification-module/notification";
 // import AdminGuard from "./guards/adminGuard";
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
       <Route path="/completed-jobs-module" element={<CompletedJobs />} />
       <Route path="/accepted-jobs-module" element={<AcceptedJobs />} />
       <Route path="/pending-jobs-module" element={<PendingJobs />} />
+      <Route path="/notification-module" element={<Notification />} />
 
       <Route path="/request-module" element={<h2>Requests Page</h2>} />
 

@@ -211,5 +211,17 @@
   "noCompletedJobs": "You haven’t completed any jobs yet.",
   "accept": "Accept",
   "reject": "Reject",
-  "completedOn": "Completed on"
+  "completedOn": "Completed on",
+  "notifications": "Notifications",
+  "no_notifications": "No notifications yet",
+  "notification_title": "Title",
+  "notification_message": "Message",
+  "send_to": "Send To",
+  "all_users": "All Users",
+  "customers": "Customers",
+  "mechanics": "Mechanics",
+  "send_notification": "Send Notification",
+  "loading": "Loading...",
+  "NewJobAssigned": "New Job Assigned",
+  "YouHaveANewJobAssigned": "You have a new job assigned"
 }

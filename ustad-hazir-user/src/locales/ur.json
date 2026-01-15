@@ -3,11 +3,9 @@
   "welcome_subtitle": "تیز اور قابل بھروسہ روڈ سائیڈ مدد، آپ کی انگلیوں پر۔",
   "create_account": "اکاؤنٹ بنائیں",
   "already_have_account": "پہلے سے اکاؤنٹ موجود ہے",
-
   "register_title": "اکاؤنٹ بنائیں",
   "register_subtitle": "تیز، قابل اعتماد روڈ سائیڈ مدد آپ کی انگلیوں پر۔",
   "name_placeholder": "نام درج کریں",
-
   "confirm_password_placeholder": "پاس ورڈ کی تصدیق کریں",
   "contact_placeholder": "رابطہ نمبر درج کریں",
   "workshop_name_placeholder": "ورکشاپ کا نام درج کریں",
@@ -17,11 +15,9 @@
   "register_as": "رجسٹر کریں بطور",
   "customer": "کسٹمر",
   "mechanic": "میکینک",
-
   "sign_up": "سائن اپ کریں",
   "cancel": "منسوخ کریں",
   "password_mismatch": "پاس ورڈ میل نہیں کھاتے!",
-
   "login_title": "لاگ ان کریں",
   "login_subtitle": "تیز اور قابل اعتماد روڈ سائیڈ مدد آپ کی انگلیوں پر۔",
   "email_placeholder": "ای میل درج کریں",
@@ -33,7 +29,6 @@
   "login_error": "لاگ ان کی خرابی",
   "empty_fields": "براہ کرم ای میل اور پاس ورڈ درج کریں",
   "user_not_found": "صارف کا پروفائل نہیں ملا",
-
   "hello": "السلام علیکم",
   "user": "صارف",
   "trusted_mechanic_ready": "آپ کا قابلِ اعتماد مکینک تیار ہے 🚗",
@@ -43,7 +38,6 @@
   "add_vehicle": "گاڑی شامل کریں",
   "my_request_history": "میری درخواستوں کی ہسٹری",
   "request_service": "سروس کی درخواست دیں",
-
   "add_vehicle_title": "گاڑی شامل کریں",
   "edit_vehicle": "گاڑی کی ترمیم کریں",
   "brand_label": "برانڈ / میک",
@@ -72,50 +66,37 @@
   "vehicle_update_success": "گاڑی کامیابی سے اپ ڈیٹ ہوگئی!",
   "vehicle_update_failed": "❌ گاڑی اپ ڈیٹ کرنے میں ناکامی",
   "vehicle_not_found": "گاڑی نہیں ملی",
-
   "service_request": "سروس کی درخواست",
   "select_vehicle": "گاڑی منتخب کریں",
   "select_saved_vehicle": "محفوظ شدہ گاڑی منتخب کریں",
-
   "service_details": "سروس کی تفصیلات",
   "select_service_type": "سروس کی قسم منتخب کریں",
-
   "oil_change": "آئل چینج",
   "brake_repair": "بریک مرمت",
   "battery_check": "بیٹری چیک",
   "tire_service": "ٹائر سروس",
   "other": "دیگر",
-
   "issue_description": "مسئلے کی تفصیل",
   "describe_issue": "مسئلے کی وضاحت کریں...",
-
   "location_pickup": "پک اپ اور ڈراپ آف",
   "pickup_address": "پک اپ ایڈریس",
   "enter_pickup_address": "پک اپ ایڈریس درج کریں",
-
   "dropoff_address": "ڈراپ آف ایڈریس",
   "enter_dropoff_address": "ڈراپ آف ایڈریس درج کریں",
-
   "upload_photo_optional": "تصویر اپ لوڈ کریں (اختیاری)",
-
   "current_location": "موجودہ مقام",
   "use_current_location": "موجودہ مقام استعمال کریں",
   "location_set": "مقام سیٹ ہوگیا",
   "location_captured": "مقام حاصل ہوگیا",
   "location_added": "موجودہ مقام کامیابی سے شامل کر دیا گیا!",
-
   "permission_denied": "اجازت مسترد",
   "allow_location_access": "براہ کرم مقام کی اجازت دیں تاکہ ہم آگے بڑھ سکیں۔",
-
   "submit_request": "درخواست جمع کریں",
   "request_submitted": "آپ کی سروس درخواست کامیابی سے جمع ہو گئی!",
   "request_error": "درخواست جمع کرنے میں ناکامی۔ دوبارہ کوشش کریں۔",
-
   "error": "غلطی",
   "fill_all_fields": "براہ کرم تمام مطلوبہ فیلڈز پُر کریں۔",
-
   "profile": "پروفائل",
-
   "change_photo": "تصویر تبدیل کریں",
   "uploading": "اپ لوڈ ہو رہا ہے...",
   "name": "نام",
@@ -127,14 +108,12 @@
   "changeLanguage": "زبان تبدیل کریں",
   "loading": "لوڈ ہو رہا ہے...",
   "success": "کامیابی",
-
   "profile_pic_updated": "پروفائل تصویر اپ ڈیٹ ہو گئی!",
   "profile_updated": "پروفائل اپ ڈیٹ ہو گیا!",
   "profile_update_failed": "پروفائل اپ ڈیٹ کرنے میں ناکامی۔",
   "reauthenticate": "ای میل اپ ڈیٹ کرنے کے لیے دوبارہ لاگ ان کریں۔",
   "image_upload_failed": "تصویر منتخب کرنے یا اپ لوڈ کرنے میں ناکامی۔",
   "logout_failed": "لاگ آؤٹ کرنے میں ناکامی۔",
-
   "all_vehicles": "تمام گاڑیاں",
   "loading_vehicles": "گاڑیاں لوڈ ہو رہی ہیں...",
   "no_vehicles_found": "کوئی گاڑیاں نہیں ملی",
@@ -148,10 +127,8 @@
   "delete": "حذف کریں",
   "confirm_delete_title": "حذف کرنے کی تصدیق",
   "confirm_delete_message": "کیا آپ واقعی اس گاڑی کو حذف کرنا چاہتے ہیں؟",
-
   "vehicle_deleted": "گاڑی حذف کر دی گئی!",
   "delete_failed": "گاڑی حذف نہیں ہو سکی",
-
   "service_request_history": "سروس کی درخواست کی تاریخ",
   "loading_service_history": "سروس کی درخواستیں لوڈ ہو رہی ہیں...",
   "no_requests_found": "کوئی درخواستیں نہیں ملی",
@@ -165,7 +142,6 @@
   "pending": "زیر التواء",
   "created": "تخلیق کی تاریخ",
   "na": "N/A",
-
   "addService": "سروس شامل کریں",
   "service": "سروس",
   "selectServiceType": "سروس کی قسم منتخب کریں",
@@ -178,16 +154,12 @@
   "carInspection": "کار معائنہ",
   "bodyPaint": "باڈی پینٹ",
   "wheelAlignment": "وہیل الائنمنٹ",
-
   "descriptionLabel": "تفصیل درج کریں",
   "descriptionPlaceholder": "سروس کی تفصیل لکھیں",
-
   "priceLabel": "قیمت (PKR)",
   "pricePlaceholder": "قیمت درج کریں",
-
   "durationLabel": "متوقع وقت",
   "durationPlaceholder": "مثلاً 1 گھنٹہ",
-
   "category": "کیٹیگری",
   "selectVehicleType": "گاڑی کی قسم منتخب کریں",
   "car": "کار",
@@ -195,54 +167,52 @@
   "truck": "ٹرک",
   "van": "وین",
   "suv": "ایس یو وی",
-
   "getLocation": "موجودہ مقام حاصل کریں",
   "fetching": "حاصل کیا جا رہا ہے...",
   "currentLocation": "موجودہ مقام",
-
   "serviceAdded": "سروس کامیابی سے شامل ہو گئی!",
   "missingFields": "درکار معلومات نہیں",
   "missingFieldsMsg": "براہ کرم تمام مطلوبہ فیلڈز پُر کریں۔",
-
   "service_history": "سروس کی تاریخ",
   "no_services": "کوئی سروس شامل نہیں کی گئی۔",
-
   "delete_service": "سروس حذف کریں",
   "delete_confirm": "کیا آپ واقعی اس سروس کو حذف کرنا چاہتے ہیں؟",
-
   "price": "قیمت",
-
   "description": "تفصیل",
   "no_description": "کوئی تفصیل فراہم نہیں کی گئی۔",
   "location": "مقام",
   "city": "شہر",
   "state": "ریاست",
   "country": "ملک",
-
   "error_pick_image": "تصویر منتخب یا اپ لوڈ نہیں ہو سکی۔",
   "error_upload_image": "تصویر اپ لوڈ کرنے میں ناکامی۔",
   "success_photo": "پروفائل تصویر اپ ڈیٹ ہو گئی!",
   "success_profile": "پروفائل اپ ڈیٹ ہو گئی!",
   "error_update_profile": "پروفائل اپ ڈیٹ نہیں ہو سکی۔",
   "error_requires_login": "ای میل اپ ڈیٹ کرنے کے لیے دوبارہ لاگ ان کریں۔",
-
-
-   "goodMorning": "صبح بخیر",
-    "readyDay": "کیا آپ ایک کامیاب دن کے لیے تیار ہیں؟",
-    "activeJob": "فعال کام",
-    "noActiveJobs": "فی الحال کوئی فعال کام نہیں ہے۔",
-    "markCompleted": "کام مکمل کریں",
-    "cancelJob": "کام منسوخ کریں",
-    "newRequests": "نئی درخواستیں",
-    "seeAll": "سب دیکھیں",
-    "noNewRequests": "کوئی نئی درخواست موجود نہیں۔",
-    "myServices": "میری خدمات",
- 
-    "completedJobs": "مکمل شدہ کام",
-    "noCompletedJobs": "ابھی تک کوئی کام مکمل نہیں ہوا۔",
-    "accept": "قبول کریں",
-    "reject": "مسترد کریں",
-   
-    "completedOn": "مکمل ہونے کی تاریخ"
-    
+  "goodMorning": "صبح بخیر",
+  "readyDay": "کیا آپ ایک کامیاب دن کے لیے تیار ہیں؟",
+  "activeJob": "فعال کام",
+  "noActiveJobs": "فی الحال کوئی فعال کام نہیں ہے۔",
+  "markCompleted": "کام مکمل کریں",
+  "cancelJob": "کام منسوخ کریں",
+  "newRequests": "نئی درخواستیں",
+  "seeAll": "سب دیکھیں",
+  "noNewRequests": "کوئی نئی درخواست موجود نہیں۔",
+  "myServices": "میری خدمات",
+  "completedJobs": "مکمل شدہ کام",
+  "noCompletedJobs": "ابھی تک کوئی کام مکمل نہیں ہوا۔",
+  "accept": "قبول کریں",
+  "reject": "مسترد کریں",
+  "completedOn": "مکمل ہونے کی تاریخ",
+  "notifications": "اطلاعات",
+  "no_notifications": "ابھی کوئی اطلاع نہیں",
+  "notification_title": "عنوان",
+  "notification_message": "پیغام",
+  "send_to": "بھیجیں",
+  "all_users": "تمام صارفین",
+  "customers": "صارفین",
+  "mechanics": "میکانک",
+  "send_notification": "اطلاع بھیجیں",
+  "loading": "لوڈ ہو رہا ہے..."
 }

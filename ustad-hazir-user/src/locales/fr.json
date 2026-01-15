@@ -3,11 +3,9 @@
   "welcome_subtitle": "Aide routière rapide et fiable à portée de main.",
   "create_account": "Créer un compte",
   "already_have_account": "Vous avez déjà un compte",
-
   "register_title": "Créer un compte",
   "register_subtitle": "Aide routière rapide et fiable à portée de main.",
   "name_placeholder": "Entrez le nom",
-
   "confirm_password_placeholder": "Confirmer le mot de passe",
   "contact_placeholder": "Entrez le numéro de contact",
   "workshop_name_placeholder": "Entrez le nom de l'atelier",
@@ -17,11 +15,9 @@
   "register_as": "S'inscrire en tant que",
   "customer": "Client",
   "mechanic": "Mécanicien",
-
   "sign_up": "S'inscrire",
   "cancel": "Annuler",
   "password_mismatch": "Les mots de passe ne correspondent pas !",
-
   "login_title": "Connexion",
   "login_subtitle": "Aide routière rapide et fiable à portée de main.",
   "email_placeholder": "Entrez l'email",
@@ -33,7 +29,6 @@
   "login_error": "Erreur de connexion",
   "empty_fields": "Veuillez saisir l'email et le mot de passe",
   "user_not_found": "Profil utilisateur introuvable",
-
   "hello": "Bonjour",
   "user": "Utilisateur",
   "trusted_mechanic_ready": "Votre mécanicien de confiance est prêt 🚗",
@@ -43,7 +38,6 @@
   "add_vehicle": "Ajouter un véhicule",
   "my_request_history": "Historique de mes demandes",
   "request_service": "Demander un service",
-
   "add_vehicle_title": "Ajouter un véhicule",
   "edit_vehicle": "Modifier le véhicule",
   "brand_label": "Marque / Modèle",
@@ -72,48 +66,36 @@
   "vehicle_update_success": "Véhicule mis à jour avec succès !",
   "vehicle_update_failed": "❌ Échec de la mise à jour du véhicule",
   "vehicle_not_found": "Véhicule introuvable",
-
   "service_request": "Demande de service",
   "select_vehicle": "Sélectionner un véhicule",
   "select_saved_vehicle": "Sélectionner un véhicule enregistré",
-
   "service_details": "Détails du service",
   "select_service_type": "Sélectionner le type de service",
-
   "oil_change": "Changement d'huile",
   "brake_repair": "Réparation des freins",
   "battery_check": "Contrôle de la batterie",
   "tire_service": "Service des pneus",
   "other": "Autre",
-
   "issue_description": "Description du problème",
   "describe_issue": "Décrire le problème...",
-
   "location_pickup": "Ramassage & Livraison",
   "pickup_address": "Adresse de ramassage",
   "enter_pickup_address": "Entrez l'adresse de ramassage",
-
   "dropoff_address": "Adresse de livraison",
   "enter_dropoff_address": "Entrez l'adresse de livraison",
-
   "upload_photo_optional": "Téléverser une photo (optionnel)",
-
   "current_location": "Position actuelle",
   "use_current_location": "Utiliser la position actuelle",
   "location_set": "Position définie",
   "location_captured": "Position capturée",
   "location_added": "Position actuelle ajoutée avec succès !",
-
   "permission_denied": "Permission refusée",
   "allow_location_access": "Veuillez autoriser l'accès à la localisation pour continuer.",
-
   "submit_request": "Soumettre la demande",
   "request_submitted": "Votre demande de service a été soumise !",
   "request_error": "Échec de la soumission de la demande. Veuillez réessayer.",
-
   "error": "Erreur",
   "fill_all_fields": "Veuillez remplir tous les champs requis.",
-
   "profile": "Profil",
   "change_photo": "Changer la photo",
   "uploading": "Téléversement...",
@@ -132,7 +114,6 @@
   "reauthenticate": "Veuillez vous déconnecter et vous reconnecter pour mettre à jour l'email.",
   "image_upload_failed": "Échec de la sélection ou du téléversement de l'image.",
   "logout_failed": "Échec de la déconnexion.",
-
   "all_vehicles": "Tous les véhicules",
   "loading_vehicles": "Chargement des véhicules...",
   "no_vehicles_found": "Aucun véhicule trouvé.",
@@ -146,10 +127,8 @@
   "delete": "Supprimer",
   "confirm_delete_title": "Confirmer la suppression",
   "confirm_delete_message": "Êtes-vous sûr de vouloir supprimer ce véhicule ?",
-
   "vehicle_deleted": "Véhicule supprimé !",
   "delete_failed": "Échec de la suppression",
-
   "service_request_history": "Historique des demandes de service",
   "loading_service_history": "Chargement de l'historique des services...",
   "no_requests_found": "Aucune demande trouvée.",
@@ -163,7 +142,6 @@
   "pending": "En attente",
   "created": "Créé",
   "na": "N/A",
-
   "addService": "Ajouter un service",
   "service": "Service",
   "selectServiceType": "Sélectionner le type de service",
@@ -176,16 +154,12 @@
   "carInspection": "Inspection du véhicule",
   "bodyPaint": "Peinture de carrosserie",
   "wheelAlignment": "Alignement des roues",
-
   "descriptionLabel": "Entrer la description",
   "descriptionPlaceholder": "Fournir la description du service",
-
   "priceLabel": "Prix (PKR)",
   "pricePlaceholder": "Entrer le prix",
-
   "durationLabel": "Temps estimé",
   "durationPlaceholder": "ex. 1 heure",
-
   "category": "Catégorie",
   "selectVehicleType": "Sélectionner le type de véhicule",
   "car": "Voiture",
@@ -193,30 +167,23 @@
   "truck": "Camion",
   "van": "Van",
   "suv": "SUV",
-
   "getLocation": "Obtenir l’emplacement actuel",
   "fetching": "Récupération...",
   "currentLocation": "Emplacement actuel",
-
   "serviceAdded": "Service ajouté avec succès !",
   "missingFields": "Champs manquants",
   "missingFieldsMsg": "Veuillez remplir tous les champs requis.",
-
   "service_history": "Historique des services",
   "no_services": "Aucun service ajouté.",
-
   "delete_service": "Supprimer le service",
   "delete_confirm": "Êtes-vous sûr de vouloir supprimer ce service ?",
-
   "price": "Prix",
-
   "description": "Description",
   "no_description": "Aucune description fournie.",
   "location": "Localisation",
   "city": "Ville",
   "state": "État",
   "country": "Pays",
-
   "error_pick_image": "Échec de sélection ou de téléchargement de l'image.",
   "error_upload_image": "Échec du téléchargement de l'image.",
   "success_photo": "Photo de profil mise à jour !",
@@ -224,21 +191,28 @@
   "error_update_profile": "Impossible de mettre à jour le profil.",
   "error_requires_login": "Veuillez vous reconnecter pour mettre à jour l'email.",
   "goodMorning": "Bonjour",
-    "readyDay": "Prêt pour une journée productive ?",
-    "activeJob": "Travail en cours",
-    "noActiveJobs": "Aucun travail actif pour le moment.",
-    "markCompleted": "Marquer comme terminé",
-    "cancelJob": "Annuler le travail",
-    "newRequests": "Nouvelles demandes",
-    "seeAll": "Voir tout",
-    "noNewRequests": "Aucune nouvelle demande.",
-    "myServices": "Mes services",
-  
-    "completedJobs": "Travaux terminés",
-    "noCompletedJobs": "Vous n’avez encore terminé aucun travail.",
-    "accept": "Accepter",
-    "reject": "Refuser",
-   
-    "completedOn": "Terminé le"
-  
+  "readyDay": "Prêt pour une journée productive ?",
+  "activeJob": "Travail en cours",
+  "noActiveJobs": "Aucun travail actif pour le moment.",
+  "markCompleted": "Marquer comme terminé",
+  "cancelJob": "Annuler le travail",
+  "newRequests": "Nouvelles demandes",
+  "seeAll": "Voir tout",
+  "noNewRequests": "Aucune nouvelle demande.",
+  "myServices": "Mes services",
+  "completedJobs": "Travaux terminés",
+  "noCompletedJobs": "Vous n’avez encore terminé aucun travail.",
+  "accept": "Accepter",
+  "reject": "Refuser",
+  "completedOn": "Terminé le",
+  "notifications": "Notifications",
+  "no_notifications": "Aucune notification pour le moment",
+  "notification_title": "Titre",
+  "notification_message": "Message",
+  "send_to": "Envoyer à",
+  "all_users": "Tous les utilisateurs",
+  "customers": "Clients",
+  "mechanics": "Mécaniciens",
+  "send_notification": "Envoyer la notification",
+  "loading": "Chargement..."
 }

@@ -2,11 +2,8 @@ import { Tabs } from "expo-router";
 import React from "react";
 
 import { HapticTab } from "@/components/haptic-tab";
-import { Ionicons } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
-import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
 export default function TabLayout() {
@@ -118,6 +115,16 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <Ionicons name="person-outline" size={28} color={color} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="notifaction"
+        options={{
+          title: "Notifications",
+          href: null,
+          // tabBarIcon: ({ color }) => (
+          //   <Ionicons name="notifications-outline" size={28} color={color} />
+          // ),
         }}
       />
     </Tabs>
