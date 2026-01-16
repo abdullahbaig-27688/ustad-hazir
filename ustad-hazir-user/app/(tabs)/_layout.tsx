@@ -133,7 +133,8 @@ export default function TabLayout() {
           title: "Help AI",
           // href: null,
           tabBarIcon: ({ color }) => (
-            <Ionicons name="notifications-outline" size={28} color={color} />
+            <Ionicons name="chatbubble-ellipses-outline" size={28} color={color} />
+
           ),
         }}
       />
