@@ -1,6 +1,7 @@
 // screens/AIChatScreen.tsx
 import Header from "@/components/Header";
-import React, { useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useCallback, useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { getDiagnosis } from "../../ai/vehicleAI";
 
@@ -16,6 +17,18 @@ const AIchatBox = () => {
 
     // Result
     const [result, setResult] = useState<any>(null);
+
+    // 🔥 RESET when screen opens again
+    useFocusEffect(
+        useCallback(() => {
+            setStep(0);
+            setEngineOn(null);
+            setBatteryIssue(null);
+            setNoiseType("none");
+            setIssueTime(null);
+            setResult(null);
+        }, [])
+    );
 
     const handleDiagnosis = () => {
         const diagnosis = getDiagnosis(
@@ -85,9 +98,6 @@ const AIchatBox = () => {
     );
 };
 
-// --------------------------
-// Styles
-// --------------------------
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: "#ffffff" },
     content: { padding: 20 },
