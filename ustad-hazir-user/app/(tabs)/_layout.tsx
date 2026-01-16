@@ -130,7 +130,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="AIchatBox"
         options={{
-          title: "Notifications",
+          title: "Help AI",
           // href: null,
           tabBarIcon: ({ color }) => (
             <Ionicons name="notifications-outline" size={28} color={color} />
