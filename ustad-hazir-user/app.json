@@ -4,7 +4,7 @@
     "slug": "ustad-hazir-user",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/welcome.png",
     "scheme": "ustadhaziruser",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
